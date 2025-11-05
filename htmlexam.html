@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Course Exam</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e34c26; /* HTML orange */
+            --primary-dark: #cc4322;
+            --secondary: #212121; /* HTML black */
+            --light: #f5f5f5;
+            --dark: #333;
+            --card-bg: #fff;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --green:green;
+            --headercolor:rgb(36, 98, 213);
+            --color: white;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .exam-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: var(--secondary);
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .timer-container {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .question p {
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #e2e6ea;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn, .back-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--light);
+            background-color: var(--secondary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+        }
+        
+        .back-btn {
+            background-color: #6c757d;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .result-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .result-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .exam-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="exam-container">
+        <a href="dashboard1.html", style="background-color:green", class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <h1>HTML Course Exam</h1>
+        <div class="timer-container" id="timer">Time Remaining: 30:00</div>
+        
+        <form id="exam-form">
+            <div id="questions-container">
+                <!-- Questions will be dynamically generated here -->
+            </div>
+            <button type="submit" class="submit-btn" id="submit-btn">Submit Exam</button>
+        </form>
+        
+        <div id="result-message" class="result-message"></div>
+    </div>
+
+    <script>
+        // Define the exam questions and correct answers
+        const questions = [
+            {
+                question: "What does HTML stand for?",
+                options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Tool Markup Language"],
+                answer: "Hyper Text Markup Language"
+            },
+            {
+                question: "Which HTML tag is used for the largest heading?",
+                options: ["`<h6>`", "`<head>`", "`<h1>`", "`<heading>`"],
+                answer: "`<h1>`"
+            },
+            {
+                question: "What is the correct HTML element for inserting a line break?",
+                options: ["`<lb>`", "`<br>`", "`<break>`", "`<newline>`"],
+                answer: "`<br>`"
+            },
+            {
+                question: "Which HTML element is used to define a paragraph?",
+                options: ["`<p>`", "`<pre>`", "`<a>`", "`<br>`"],
+                answer: "`<p>`"
+            },
+            {
+                question: "Which attribute is used to provide a tooltip for an element?",
+                options: ["`title`", "`tooltip`", "`info`", "`alt`"],
+                answer: "`title`"
+            },
+            {
+                question: "Which is the correct way to link an external CSS file?",
+                options: ["`<style src='style.css'>`", "`<link rel='stylesheet' href='style.css'>`", "`<stylesheet>style.css</stylesheet>`", "`<css>style.css</css>`"],
+                answer: "`<link rel='stylesheet' href='style.css'>`"
+            },
+            {
+                question: "What is the correct HTML for creating a hyperlink?",
+                options: ["`<a>http://www.google.com</a>`", "`<a href='http://www.google.com'>Google</a>`", "`<a url='http://www.google.com'>Google</a>`", "`<a name='http://www.google.com'>Google</a>`"],
+                answer: "`<a href='http://www.google.com'>Google</a>`"
+            },
+            {
+                question: "How can you make a numbered list?",
+                options: ["`<ul>`", "`<dl>`", "`<li>`", "`<ol>`"],
+                answer: "`<ol>`"
+            },
+            {
+                question: "What is the correct HTML element for playing audio files?",
+                options: ["`<sound>`", "`<mp3>`", "`<audio>`", "`<voice>`"],
+                answer: "`<audio>`"
+            },
+            {
+                question: "What is the purpose of the `<head>` element?",
+                options: ["To contain the main content of the document.", "To contain metadata about the HTML document.", "To define the header for a document or section.", "To define a document's navigation links."],
+                answer: "To contain metadata about the HTML document."
+            },
+            {
+                question: "Which tag is used to define an image in HTML?",
+                options: ["`<image>`", "`<img>`", "`<pic>`", "`<picture>`"],
+                answer: "`<img>`"
+            },
+            {
+                question: "Which attribute specifies an alternative text for an image, if the image cannot be displayed?",
+                options: ["`src`", "`alt`", "`href`", "`link`"],
+                answer: "`alt`"
+            },
+            {
+                question: "What is the correct HTML for creating a checkbox?",
+                options: ["`<input type='checkbox'>`", "`<checkbox>`", "`<input type='check'>`", "`<input type='radio'>`"],
+                answer: "`<input type='checkbox'>`"
+            },
+            {
+                question: "What does the `<footer>` element represent?",
+                options: ["A footer for a document or section.", "A new section in a document.", "The main content of the document.", "A group of navigation links."],
+                answer: "A footer for a document or section."
+            },
+            {
+                question: "Which HTML tag is used to create a table?",
+                options: ["`<table>`", "`<tr>`", "`<td>`", "`<th>`"],
+                answer: "`<table>`"
+            },
+            {
+                question: "What is the correct HTML for a button?",
+                options: ["`<input type='button' value='Click Me'>`", "`<button>`Click Me`</button>`", "`<click>Click Me</click>`", "Both A and B are correct."],
+                answer: "Both A and B are correct."
+            },
+            {
+                question: "Which element is used to describe the web page content?",
+                options: ["`<!DOCTYPE html>`", "`<html>`", "`<body>`", "`<title>`"],
+                answer: "`<title>`"
+            },
+            {
+                question: "How can you specify a list that is ordered?",
+                options: ["By using the `<ol>` tag.", "By using the `<ul>` tag.", "By using the `<dl>` tag.", "By using the `<list>` tag."],
+                answer: "By using the `<ol>` tag."
+            },
+            {
+                question: "Which HTML element specifies a header for a document or section?",
+                options: ["`<h1>`", "`<section>`", "`<header>`", "`<top>`"],
+                answer: "`<header>`"
+            },
+            {
+                question: "What is the correct HTML for making a text area?",
+                options: ["`<input type='textarea'>`", "`<input type='text'>`", "`<textarea>`", "`<input type='text-area'>`"],
+                answer: "`<textarea>`"
+            },
+            {
+                question: "Which HTML element is used to get user input?",
+                options: ["`<input>`", "`<enter>`", "`<get>`", "`<prompt>`"],
+                answer: "`<input>`"
+            },
+            {
+                question: "What does the `<strong>` tag do?",
+                options: ["Italicizes text.", "Creates a strikethrough effect.", "Bolds text with added semantic importance.", "Makes text larger."],
+                answer: "Bolds text with added semantic importance."
+            },
+            {
+                question: "Which attribute is used to group related elements in a form?",
+                options: ["`group`", "`fieldset`", "`form-group`", "`container`"],
+                answer: "`fieldset`"
+            },
+            {
+                question: "What is the primary difference between `<div>` and `<section>`?",
+                options: ["`<div>` is for layout, `<section>` is for semantic content.", "`<div>` is a block-level element, `<section>` is inline.", "There is no difference.", "`<div>` is deprecated."],
+                answer: "`<div>` is for layout, `<section>` is for semantic content."
+            },
+            {
+                question: "Which HTML5 element specifies a header or introduction for an article or section?",
+                options: ["`<article>`", "`<header>`", "`<intro>`", "`<main>`"],
+                answer: "`<header>`"
+            },
+            {
+                question: "How do you add a comment in HTML?",
+                options: ["`// This is a comment`", "`<!-- This is a comment -->`", "`/* This is a comment */`", "`'This is a comment`"],
+                answer: "`<!-- This is a comment -->`"
+            },
+            {
+                question: "Which attribute is used to make an input field required?",
+                options: ["`required`", "`must`", "`validate`", "`check`"],
+                answer: "`required`"
+            },
+            {
+                question: "What is the purpose of the `alt` attribute on an `<img>` tag?",
+                options: ["To provide a tooltip on hover.", "To specify the image's source.", "To provide alternative text for screen readers or when the image fails to load.", "To set the image's alignment."],
+                answer: "To provide alternative text for screen readers or when the image fails to load."
+            },
+            {
+                question: "Which tag is used to create a dropdown list?",
+                options: ["`<input type='list'>`", "`<select>`", "`<dropdown>`", "`<options>`"],
+                answer: "`<select>`"
+            },
+            {
+                question: "What does `colspan` attribute in a table do?",
+                options: ["Spans a cell across multiple columns.", "Spans a cell across multiple rows.", "Creates a new column.", "Merges all cells in a row."],
+                answer: "Spans a cell across multiple columns."
+            },
+            {
+                question: "Which character is used to indicate an end tag?",
+                options: ["`/`", "`<`", "`>`", "`!`"],
+                answer: "`/`"
+            },
+            {
+                question: "What is the purpose of the `DOCTYPE` declaration?",
+                options: ["To define a new document.", "To tell the browser which HTML version the page is written in.", "To add a doctype to the page title.", "To link a stylesheet."],
+                answer: "To tell the browser which HTML version the page is written in."
+            },
+            {
+                question: "How do you apply an `id` to an HTML element?",
+                options: ["`<div id='myDiv'>`", "`<div class='myDiv'>`", "`<div data-id='myDiv'>`", "`<div>` with a style attribute."],
+                answer: "`<div id='myDiv'>`"
+            },
+            {
+                question: "Which tag is used to define a list item?",
+                options: ["`<item>`", "`<list>`", "`<li>`", "`<ulitem>`"],
+                answer: "`<li>`"
+            },
+            {
+                question: "What is the correct HTML for a radio button?",
+                options: ["`<input type='radio'>`", "`<input type='select'>`", "`<radio>`", "`<input type='checkbox'>`"],
+                answer: "`<input type='radio'>`"
+            },
+            {
+                question: "Which element is used for the main content of a document?",
+                options: ["`<header>`", "`<main>`", "`<body>`", "`<article>`"],
+                answer: "`<main>`"
+            },
+            {
+                question: "Which attribute is used to specify the URL of a link?",
+                options: ["`src`", "`href`", "`link`", "`url`"],
+                answer: "`href`"
+            },
+            {
+                question: "The `<aside>` element is for what purpose?",
+                options: ["To contain content related to the surrounding content.", "To define a section of a document.", "To create a sidebar.", "To contain a list of links."],
+                answer: "To contain content related to the surrounding content."
+            },
+            {
+                question: "Which tag is used to embed a video?",
+                options: ["`<video>`", "`<media>`", "`<play>`", "`<movie>`"],
+                answer: "`<video>`"
+            },
+            {
+                question: "What is the HTML element for a table row?",
+                options: ["`<th>`", "`<td>`", "`<tr>`", "`<table>`"],
+                answer: "`<tr>`"
+            },
+            {
+                question: "Which attribute specifies a unique identifier for an HTML element?",
+                options: ["`class`", "`name`", "`tag`", "`id`"],
+                answer: "`id`"
+            },
+            {
+                question: "What is the correct HTML for a mailto link?",
+                options: ["`<a href='mailto:test@example.com'>Email Us</a>`", "`<a mail='test@example.com'>Email Us</a>`", "`<email>test@example.com</email>`", "`<a href='email:test@example.com'>Email Us</a>`"],
+                answer: "`<a href='mailto:test@example.com'>Email Us</a>`"
+            },
+            {
+                question: "What is the purpose of the `placeholder` attribute in an `<input>` tag?",
+                options: ["To provide default text that the user can edit.", "To define the input's name.", "To provide a hint or example of the expected input.", "To make the input field required."],
+                answer: "To provide a hint or example of the expected input."
+            },
+            {
+                question: "Which HTML element is used for the smallest heading?",
+                options: ["`<h3>`", "`<h5>`", "`<h2>`", "`<h6>`"],
+                answer: "`<h6>`"
+            },
+            {
+                question: "Which attribute is used to define inline styles?",
+                options: ["`style`", "`class`", "`id`", "`css`"],
+                answer: "`style`"
+            },
+            {
+                question: "The `<figure>` and `<figcaption>` elements are used for what?",
+                options: ["To create a form.", "To add a new section.", "To contain a diagram, image, or code listing with a caption.", "To create a list of items."],
+                answer: "To contain a diagram, image, or code listing with a caption."
+            },
+            {
+                question: "What is the correct HTML for adding a background color?",
+                options: ["`<body bg-color='yellow'>`", "`<background>yellow</background>`", "`<body style='background-color:yellow;'>`", "`<body color='yellow'>`"],
+                answer: "`<body style='background-color:yellow;'>`"
+            },
+            {
+                question: "Which HTML element is used for navigation links?",
+                options: ["`<nav>`", "`<navigation>`", "`<links>`", "`<link-list>`"],
+                answer: "`<nav>`"
+            },
+            {
+                question: "What does the `<meta>` tag define?",
+                options: ["Metadata about an HTML document.", "A main section.", "A new link.", "A header for the document."],
+                answer: "Metadata about an HTML document."
+            },
+            {
+                question: "Which HTML element defines a preformatted text?",
+                options: ["`<p-format>`", "`<pre>`", "`<text>`", "`<format>`"],
+                answer: "`<pre>`"
+            },
+            {
+                question: "Which HTML attribute specifies that an input field should be read-only?",
+                options: ["`readonly`", "`disabled`", "`unchangeable`", "`static`"],
+                answer: "`readonly`"
+            },
+            {
+                question: "What is the correct HTML element for an ordered list?",
+                options: ["`<ul>`", "`<li>`", "`<ol>`", "`<dl>`"],
+                answer: "`<ol>`"
+            },
+            {
+                question: "What is the correct HTML for embedding a YouTube video?",
+                options: ["`<video src='youtube.com/video123'>`", "`<embed src='youtube.com/video123'>`", "`<iframe src='youtube.com/video123'>`", "`<source src='youtube.com/video123'>`"],
+                answer: "`<iframe src='youtube.com/video123'>`"
+            },
+            {
+                question: "Which HTML element is used to define an image map?",
+                options: ["`<map>`", "`<area>`", "`<imagemap>`", "`<figure>`"],
+                answer: "`<map>`"
+            },
+            {
+                question: "Which of the following is an empty HTML element?",
+                options: ["`<p>`", "`<a>`", "`<br>`", "`<div>`"],
+                answer: "`<br>`"
+            }
+        ];
+
+        // --- Timer Logic ---
+        const EXAM_DURATION = 50 * 60; // 50 minutes in seconds
+        let timeRemaining = EXAM_DURATION;
+        let timerInterval;
+
+        const timerDisplay = document.getElementById('timer');
+        const examForm = document.getElementById('exam-form');
+        const resultMessage = document.getElementById('result-message');
+        const questionsContainer = document.getElementById('questions-container');
+
+        // Function to update the timer display
+        function updateTimer() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timerDisplay.textContent = `Time Remaining: ${formattedTime}`;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                submitExam(null, true); // Automatically submit the exam when time runs out
+            }
+            timeRemaining--;
+        }
+
+        // Function to start the timer
+        function startTimer() {
+            timeRemaining = EXAM_DURATION;
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Function to dynamically generate questions
+        function generateQuestions() {
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.id = `q${index + 1}`;
+
+                const questionNumber = document.createElement('div');
+                questionNumber.classList.add('question-number');
+                questionNumber.textContent = `Question ${index + 1} of ${questions.length}`;
+                
+                const questionText = document.createElement('p');
+                questionText.textContent = q.question;
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                q.options.forEach(option => {
+                    const label = document.createElement('label');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `q${index + 1}`;
+                    radio.value = option;
+                    radio.required = true;
+
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(option));
+                    optionsDiv.appendChild(label);
+                });
+
+                questionDiv.appendChild(questionNumber);
+                questionDiv.appendChild(questionText);
+                questionDiv.appendChild(optionsDiv);
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Function to show the result message
+        function showResult(message, isSuccess) {
+            resultMessage.textContent = message;
+            resultMessage.className = `result-message ${isSuccess ? 'success' : 'error'}`;
+            resultMessage.style.display = 'block';
+            resultMessage.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Function to handle exam submission
+        async function submitExam(e, timedOut = false) {
+            if (e) e.preventDefault();
+            
+            clearInterval(timerInterval);
+            examForm.querySelector('.submit-btn').disabled = true;
+
+            let score = 0;
+            const userAnswers = {};
+
+            questions.forEach((q, index) => {
+                const questionName = `q${index + 1}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                
+                if (selectedOption) {
+                    const userAnswer = selectedOption.value;
+                    userAnswers[questionName] = userAnswer;
+                    if (userAnswer === q.answer) {
+                        score++;
+                    }
+                } else {
+                    userAnswers[questionName] = null;
+                }
+            });
+
+            const user_id = sessionStorage.getItem('user_id');
+            const name = sessionStorage.getItem('name');
+
+            const exam_type = 'HTML';
+            
+            if (!user_id) {
+                showResult('You are not logged in. Redirecting to login page...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/submit-exam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: user_id,
+                        exam_type: exam_type,
+                        score: score,
+                        answers: JSON.stringify(userAnswers)
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showResult(`Exam submitted successfully! Your score is ${score} out of ${questions.length}.`, true);
+                    examForm.remove();
+                } else {
+                    showResult(`Error submitting exam: ${result.message}`, false);
+                    console.error('Server error:', result.message);
+                }
+            } catch (error) {
+                showResult('Network error. Please try again.', false);
+                console.error('Exam submission error:', error);
+            }
+        }
+        
+        // Event listeners
+        examForm.addEventListener('submit', submitExam);
+        
+        // Start the timer and generate questions when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            const user_id = sessionStorage.getItem('user_id');
+            const name = sessionStorage.getItem('name');
+            
+            if (!user_id) {
+                showResult('You must be logged in to take the exam. Redirecting to login...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } else {
+                document.title = `${name}'s HTML Exam`;
+                generateQuestions();
+                startTimer();
+            }
+        });
+        
+        // Prevent accidental refresh
+        window.addEventListener('beforeunload', (e) => {
+            if (timeRemaining > 0 && timeRemaining < EXAM_DURATION) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stride - Login</title>
+  <link rel="icon" href="STRIDELOGO.png" type="image">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4e54c8;
+      --secondary: #8f94fb;
+      --light: #f5f5f5;
+      --dark: #333;
+      --card-bg: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --white:white;
+      --blue:green;
+      --headercolor:rgb(36,98,213);
+      --green:green;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body {
+      background: linear-gradient(to right, var(--green), var(--headercolor));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--dark);
+    }
+    .container {
+      background: var(--white);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .input-group {
+      position: relative;
+    }
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--secondary);
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 12px 12px 45px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+    .signup-link {
+      margin-top: 20px;
+      color: var(--dark);
+    }
+    .signup-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+    .response-message {
+      margin-top: 15px;
+      font-weight: 500;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+    }
+    .response-message.success {
+      background-color: #d4edda;
+      color: #155724;
+      display: block;
+    }
+    .response-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    <p class="subtitle">Welcome back! Please login to continue.</p>
+
+    <form id="login-form">
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    
+    <div id="response-message" class="response-message"></div>
+
+    <p class="signup-link">
+      Don't have an account? <a href="signup.html">Sign up here</a>
+    </p>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const responseMessage = document.getElementById('response-message');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        // IMPORTANT: Clear any previous session data
+        sessionStorage.clear();
+
+        // Send a POST request to the server's login route
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // On successful login, save user info to sessionStorage
+          sessionStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('user_id', result.user_id);
+          sessionStorage.setItem('name', result.name);
+          sessionStorage.setItem('role', result.role); // Save user role
+          sessionStorage.setItem('email', result.email);
+          // Display success message and redirect
+          showStatus('Login successful! Redirecting...', 'success');
+          window.location.href = 'dashboard.html';
+        } else {
+          // On failed login, display error message from the server
+          showStatus(result.message || 'Login failed. Please check your credentials.', 'error');
+        }
+      } catch (error) {
+        console.error('Network or server error:', error);
+        showStatus('A network error occurred. Please try again.', 'error');
+      }
+    });
+
+    // Helper function to show status messages
+    function showStatus(message, type) {
+      responseMessage.textContent = message;
+      responseMessage.className = `response-message ${type}`;
+    }
+  </script>
+</body>
+</html>

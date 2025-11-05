@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stride - Learn Without Limits</title>
+  <link rel="icon" href="STRIDELOGO.png" type="image">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4e54c8;
+      --secondary: #8f94fb;
+      --light: #f5f5f5;
+      --dark: #333;
+      --card-bg: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body { background: var(--light); color: var(--dark); }
+    header {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: 22px; }
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+    nav a:hover { background: rgba(255,255,255,0.2); }
+    .hero {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      text-align: center;
+      padding: 70px 20px;
+    }
+    .hero h2 { font-size: 32px; margin-bottom: 10px; }
+    .hero p { max-width: 600px; margin: auto; font-size: 16px; }
+    .hero button {
+      margin-top: 20px;
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s, color 0.3s;
+    }
+    .hero button:hover {
+      background: var(--primary);
+      color: white;
+    }
+    section {
+      padding: 40px 25px;
+    }
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .category-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+    .category-card:hover {
+      transform: translateY(-5px);
+    }
+    .category-card i {
+      font-size: 30px;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Stride</h1>
+  </header>  
+  <div>
+    <nav>
+      <a href="signup.html" style="color:#4e54c8"><i class="fas fa-th"></i> DASHBOARD</a>
+      <a href="about.html" style="color:#4e54c8"><i class="fas fa-info-circle"></i> About</a>
+      <a href="signup.html" style="color:#4e54c8"><i class="fas fa-user-plus"></i> Sign Up</a>
+      <a href="login.html"style="color:#4e54c8"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+      <a href="CONTACTS.html"style="color:#4e54c8"> CONTACT US </a>
+      <a href="feedback.html"style="color:#4e54c8">FEEDBACKS</a>
+    </nav>
+    </div>
+  
+
+  <section class="hero">
+    <h2>Welcome to Stride</h2>
+    <p>Stride is your gateway to limitless learning. Access quality courses, tests, and interactive quizzes — anytime, anywhere.</p>
+    <button onclick="window.location.href='signup.html'">Get Started</button>
+  </section>
+
+  <section id="categories">
+    <h2>Popular Categories</h2>
+    <div class="categories">
+      <div class="category-card">
+        <i class="fas fa-elephant-image"></i>
+        <h3>JAVA Programming</h3>
+        <a href="signup.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Learn coding languages like Python, JavaScript .</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>HTML COURSE</h3>
+        <a href="signup.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Learn HTML from scratch with simple tutorials.</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-flasik"></i>
+        <h3>JAVASCRIPT</h3>
+        <a href="signup.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Javascript Best  learning materials offered.</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-langouage"></i>
+        <h3>MYSQL</h3>
+        <a href="signup.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Learning how to create,add tables and other more functionality has been made easier by <b>STRIDE</b> .</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About Stride</h2>
+    <p>Stride is an innovative e-learning platform designed to help learners of all backgrounds gain valuable skills. Our mission is to make education accessible, engaging, and effective by combining expert-led content with interactive learning tools.</p>
+    <a href="about.html" style="color:goldenrod">MORE</a>
+  </section>
+
+  <footer>
+    &copy; 2025 Stride. All rights reserved.
+  </footer>
+</body>
+</html>

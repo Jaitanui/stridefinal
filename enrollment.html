@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll in a Course | Stride</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <!-- Use Tailwind CSS for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style for the message container */
+        .message-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .message-box {
+            display: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+        
+        /* Success message styles */
+        .message-box.success {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+
+        /* Error message styles */
+        .message-box.error {
+            background-color: #d32f2f; /* Red */
+            color: white;
+        }
+        
+        .message-box.show {
+            display: block;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body style="background:green", class=" flex items-center justify-center min-h-screen p-4">
+    <div style="background:white"class="rounded-2xl shadow-xl p-8 space-y-6">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-white mb-2">
+                <span class="text-indigo-400">Course</span> Enrollment
+            </h1>
+            <p class="text-slate-400 text-sm">Select a course to start your learning journey.</p>
+        </div>
+
+        <form id="enrollmentForm" class="space-y-4">
+            <div>
+                <label for="course_name" class="block text-sm font-medium text-slate-300 mb-1">Select a Course</label>
+                <select 
+                    id="course_name" 
+                    name="course_name"
+                    required
+                    class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-slate-600 transition-colors"
+                >
+                    <option value="" disabled selected>-- Choose a course --</option>
+                    <option value="html">HTML</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="mysql">MySQL</option>
+                    <option value="java">Java</option>
+                </select>
+            </div>
+            <button
+                type="submit"
+                class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-indigo-500/50"
+            >
+                Enroll Now
+            </button>
+        </form>
+    </div>
+
+    <!-- The message container is now outside the main form div for better positioning -->
+    <div class="message-container">
+        <div id="messageBox" class="message-box rounded-lg"></div>
+    </div>
+    
+    <script>
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+        const userId = sessionStorage.getItem('user_id');
+        const name = sessionStorage.getItem('name');
+        const email = sessionStorage.getItem('email');
+
+        if (!isLoggedIn || !userId) {
+            window.location.href = 'login.html';
+        }
+
+        const enrollmentForm = document.getElementById('enrollmentForm');
+        const messageBox = document.getElementById('messageBox');
+
+        // Function to display messages with better styling and visibility
+        function showMessage(message, type) {
+            // Remove existing classes to reset state
+            messageBox.className = 'message-box rounded-lg';
+            
+            // Set message text and add type class
+            messageBox.textContent = message;
+            messageBox.classList.add(type);
+            
+            // Add 'show' class to make it visible with a fade-in effect
+            messageBox.classList.add('show');
+
+            // Hide the message box after a few seconds
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                // Use a separate timeout to fully hide the element after the fade-out transition
+                setTimeout(() => {
+                    messageBox.style.display = 'none';
+                }, 300); // This duration should match the CSS transition time
+            }, 3000);
+        }
+
+        enrollmentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const courseName = document.getElementById('course_name').value;
+            
+            if (!userId || !name || !email) {
+                showMessage("User data not found. Please log in again.", 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/enroll', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, name, email, courseName })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    enrollmentForm.reset();
+                } else {
+                    showMessage(result.message || 'Enrollment failed. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error during enrollment fetch:', error);
+                showMessage('An unexpected error occurred. Please try again.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

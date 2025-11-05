@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRIDE Courses</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Dyslexic:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, green, rgb(36, 98, 213),green);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, rgb(36, 98, 213), green);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 5px solid #3498db;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+
+
+
+        /*
+        * This CSS is crucial for the accessibility menu.
+       * Copy and paste this entire block into the <head> of all your pages.
+       */
+       @import url('https://fonts.googleapis.com/css2?family=Open+Dyslexic:wght@400;700&display=swap');
+
+        body {
+        /* Base styles with a smooth transition for all property changes */
+        transition: background-color 0.3s ease, color 0.3s ease;
+        /* Custom property for font size multiplier */
+        --font-size-multiplier: 1;
+        }
+
+        /* Adjust font sizes dynamically */
+        h1 { font-size: calc(2.25rem * var(--font-size-multiplier)); }
+        h2 { font-size: calc(1.875rem * var(--font-size-multiplier)); }
+        p, li { font-size: calc(1rem * var(--font-size-multiplier)); }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+        background-color: #1a202c !important; /* Tailwind's gray-900 equivalent */
+        color: #f7fafc !important; /* Tailwind's gray-100 equivalent */
+        }
+        body.dark-mode .bg-white, body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100 {
+        background-color: #2d3748 !important; /* Tailwind's gray-800 equivalent */
+        color: #f7fafc !important;
+        }
+        body.dark-mode .text-slate-800, body.dark-mode .text-slate-600, body.dark-mode .text-slate-500 {
+        color: #f7fafc !important;
+        }
+        body.dark-mode a {
+        color: #63b3ed !important; /* A light blue for contrast */
+        }
+
+        /* --- Dyslexia Mode Styles --- */
+        body.dyslexia-mode {
+        font-family: 'Open Dyslexic', sans-serif !important;
+        letter-spacing: 0.1em !important;
+        word-spacing: 0.2em !important;
+        }
+
+        /* --- High Contrast Mode Styles --- */
+        body.high-contrast {
+        background-color: #000 !important;
+        color: #fff !important;
+        }
+        body.high-contrast .bg-white, body.high-contrast .bg-gray-50, body.high-contrast .bg-gray-100 {
+        background-color: #fff !important;
+        color: #000 !important;
+        border: 2px solid #000 !important;
+        }
+        body.high-contrast .text-slate-800, body.high-contrast .text-slate-600, body.high-contrast .text-slate-500 {
+        color: #000 !important;
+        }
+        body.high-contrast a, body.high-contrast .text-indigo-500 {
+        color: #000 !important;
+        background-color: yellow !important;
+        font-weight: bold;
+        }
+        body.high-contrast input, body.high-contrast select {
+        background-color: #fff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        }
+        body.high-contrast .rounded-2xl {
+        border: 2px solid #fff;
+        }
+
+        /*course part*/
+        .courses-container {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .course-card.java {
+            background: linear-gradient(135deg, #f0ad4e, #e74c3c);
+            border-color: #e74c3c;
+        }
+        
+        .course-card.html {
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border-color: #3498db;
+        }
+        
+        .course-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .course-link:hover {
+            transform: scale(1.05);
+        }
+        
+        .course-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .course-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .course-card.java:hover {
+            background: linear-gradient(135deg, #e9a342, #d62c1a);
+        }
+        
+        .course-card.html:hover {
+            background: linear-gradient(135deg, #2a89c8, #25b561);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            font-size: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .footer-links a {
+            color: #3498db;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #2ecc71;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .courses-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .course-card {
+                height: 180px;
+            }
+            
+            .course-name {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Programming Courses</h1>
+            <p class="subtitle">Select a course to begin your learning journey</p>
+        </header>
+        
+        <div class="courses-container">
+            <div class="course-card java">
+                <a href="javacourse.html" class="course-link">
+                    <i class="fab fa-java course-icon"></i>
+                    <h2 class="course-name">Java Course</h2>
+                    <div class="badge">Popular</div>
+                </a>
+            </div>
+            
+            <div class="course-card html">
+                <a href="htmlcourse.html" class="course-link">
+                    <i class="fab fa-html5 course-icon"></i>
+                    <h2 class="course-name">HTML Course</h2>
+                    <div class="badge">Beginner</div>
+                </a>
+            </div>
+            <div class="course-card javascript">
+                <a href="javascriptcoursecontents.html" class="course-link">
+                    <i class="fab fa-javascript course-icon"></i>
+                    <h2 class="course-name" style="color:#d62c1a">Javascript Course</h2>
+                    <div class="badge">Popular</div>
+                </a>
+            </div>
+            <div class="course-card html">
+                <a href="mysql.html" class="course-link">
+                    <i class="fab fa-mysql course-icon"></i>
+                    <h2 class="course-name">MYSQL</h2>
+                    <div class="badge">Beginner</div>
+                </a>
+            </div>
+        </div>
+        <div class="courses-container">
+            
+        
+        <footer>
+            <p>© 2025 STRIDE. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="CONTACTS.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="termsofservice.html">Terms of Service</a>
+            </div>
+        </footer>
+    </div>
+    //accessibility part
+    <div id="accessibility-menu" class="fixed bottom-4 right-4 z-50">
+    <!-- Main menu button -->
+    <button id="menu-toggle" class="relative w-12 h-12 bg-indigo-500 text-white rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        <!-- Icon SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v.75A1.25 1.25 0 0 1 7.75 7H6a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2v4.5a2.5 2.5 0 0 0 5 0V13h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-1.75a1.25 1.25 0 0 1-1.25-1.25V5a3 3 0 0 0-3-3z" />
+        </svg>
+    </button>
+
+    <!-- Menu items container -->
+    <div id="menu-items" class="absolute bottom-16 right-0 bg-gray-200 rounded-xl shadow-lg p-3 space-y-3 transition-transform duration-300 scale-0 origin-bottom-right">
+        <!-- Font Size Increase -->
+        <button id="font-increase" title="Increase Font Size" class="w-12 h-12 flex items-center justify-center bg-gray-300 text-slate-800 rounded-lg transition-colors hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <span class="font-bold text-2xl">+A</span>
+        </button>
+        <!-- Font Size Decrease -->
+        <button id="font-decrease" title="Decrease Font Size" class="w-12 h-12 flex items-center justify-center bg-gray-300 text-slate-800 rounded-lg transition-colors hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <span class="font-bold text-2xl">-A</span>
+        </button>
+        <!-- Dark Mode Toggle -->
+        <button id="dark-mode-toggle" title="Toggle Dark Mode" class="w-12 h-12 flex items-center justify-center bg-gray-300 text-slate-800 rounded-lg transition-colors hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <path d="M21 12.79A9 9 0 1 1 11.21 3A7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <!-- Dyslexia Mode Toggle -->
+        <button id="dyslexia-mode-toggle" title="Toggle Dyslexia Mode" class="w-12 h-12 flex items-center justify-center bg-gray-300 text-slate-800 rounded-lg transition-colors hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <span class="font-bold text-2xl">D</span>
+        </button>
+        <!-- High Contrast Toggle -->
+        <button id="contrast-toggle" title="Toggle High Contrast" class="w-12 h-12 flex items-center justify-center bg-gray-300 text-slate-800 rounded-lg transition-colors hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a10 10 0 0 0 0 20v-10h10a10 10 0 0 0-10-10z" />
+            </svg>
+        </button>
+    </div>
+    </div>
+
+     <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const menuToggleBtn = document.getElementById('menu-toggle');
+        const menuItems = document.getElementById('menu-items');
+        const fontIncreaseBtn = document.getElementById('font-increase');
+        const fontDecreaseBtn = document.getElementById('font-decrease');
+        const darkModeToggleBtn = document.getElementById('dark-mode-toggle');
+        const dyslexiaModeToggleBtn = document.getElementById('dyslexia-mode-toggle');
+        const contrastToggleBtn = document.getElementById('contrast-toggle');
+
+        // --- State and Local Storage ---
+        const accessibilityState = {
+            fontSizeMultiplier: 1,
+            isDarkMode: false,
+            isDyslexiaMode: false,
+            isHighContrast: false,
+        };
+
+        const loadState = () => {
+            try {
+                const savedState = JSON.parse(localStorage.getItem('accessibilityState'));
+                if (savedState) {
+                    accessibilityState.fontSizeMultiplier = savedState.fontSizeMultiplier || 1;
+                    accessibilityState.isDarkMode = savedState.isDarkMode || false;
+                    accessibilityState.isDyslexiaMode = savedState.isDyslexiaMode || false;
+                    accessibilityState.isHighContrast = savedState.isHighContrast || false;
+                }
+            } catch (e) {
+                console.error("Could not load accessibility state from local storage", e);
+            }
+        };
+
+        const saveState = () => {
+            localStorage.setItem('accessibilityState', JSON.stringify(accessibilityState));
+        };
+
+        const applyState = () => {
+            // Apply font size
+            body.style.setProperty('--font-size-multiplier', accessibilityState.fontSizeMultiplier);
+
+            // Apply dark mode
+            if (accessibilityState.isDarkMode) {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+
+            // Apply dyslexia mode
+            if (accessibilityState.isDyslexiaMode) {
+                body.classList.add('dyslexia-mode');
+            } else {
+                body.classList.remove('dyslexia-mode');
+            }
+
+            // Apply high contrast mode
+            if (accessibilityState.isHighContrast) {
+                body.classList.add('high-contrast');
+            } else {
+                body.classList.remove('high-contrast');
+            }
+        };
+
+        // --- Event Handlers ---
+
+        // Toggle menu visibility
+        menuToggleBtn.addEventListener('click', () => {
+            menuItems.classList.toggle('scale-0');
+            menuItems.classList.toggle('scale-100');
+        });
+
+        // Font size controls
+        fontIncreaseBtn.addEventListener('click', () => {
+            accessibilityState.fontSizeMultiplier = Math.min(accessibilityState.fontSizeMultiplier + 0.1, 1.5); // Max 1.5x
+            applyState();
+            saveState();
+        });
+
+        fontDecreaseBtn.addEventListener('click', () => {
+            accessibilityState.fontSizeMultiplier = Math.max(accessibilityState.fontSizeMultiplier - 0.1, 0.8); // Min 0.8x
+            applyState();
+            saveState();
+        });
+
+        // Dark mode toggle
+        darkModeToggleBtn.addEventListener('click', () => {
+            accessibilityState.isDarkMode = !accessibilityState.isDarkMode;
+            if (accessibilityState.isDarkMode && accessibilityState.isHighContrast) {
+                accessibilityState.isHighContrast = false; // Disable high contrast if dark mode is enabled
+            }
+            applyState();
+            saveState();
+        });
+
+        // Dyslexia mode toggle
+        dyslexiaModeToggleBtn.addEventListener('click', () => {
+            accessibilityState.isDyslexiaMode = !accessibilityState.isDyslexiaMode;
+            applyState();
+            saveState();
+        });
+
+        // High contrast toggle
+        contrastToggleBtn.addEventListener('click', () => {
+            accessibilityState.isHighContrast = !accessibilityState.isHighContrast;
+            if (accessibilityState.isHighContrast && accessibilityState.isDarkMode) {
+                accessibilityState.isDarkMode = false; // Disable dark mode if high contrast is enabled
+            }
+            applyState();
+            saveState();
+        });
+
+        // Initial load
+        loadState();
+        applyState();
+    });
+     </script>
+</body>
+</html>

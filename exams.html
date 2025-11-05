@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRIDE Platform - Exam Selection</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, green 0%, rgb(36, 98, 213) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background:white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, green,rgb(36, 98, 213));
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .welcome h2 {
+            color: #3a7bd5;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .welcome p {
+            color: #555;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .course-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        
+        .course-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .course-btn i {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .course-btn h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .course-btn p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .java-btn {
+            background: linear-gradient(to bottom right, #ff416c, #ff4b2b);
+            color: white;
+        }
+        
+        .html-btn {
+            background: linear-gradient(to bottom right, #11998e, #38ef7d);
+            color: white;
+        }
+        
+        .js-btn {
+            background: linear-gradient(to bottom right, #f7971e, #ffd200);
+            color: white;
+        }
+        
+        .mysql-btn {
+            background: linear-gradient(to bottom right, #396afc, #2948ff);
+            color: white;
+        }
+        
+        .dashboard-btn {
+            display: block;
+            width: 200px;
+            margin: 40px auto 20px;
+            padding: 15px;
+            background: linear-gradient(to right, #3a7bd5, #00d2ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .dashboard-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .welcome h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>STRIDE PLATFORM</h1>
+            </div>
+            <p class="subtitle">Select a course to begin your exam</p>
+        </header>
+        
+        <div class="content">
+            <div class="welcome">
+                <h2>Welcome to Your Exam Center</h2>
+                <p>Choose from the available courses below to start your examination. Make sure you're prepared with all the necessary materials before beginning.</p>
+            </div>
+            
+            <div class="button-grid">
+                <button class="course-btn java-btn">
+                    <i class="fab fa-java"></i>
+                    <h3>Java</h3>
+                    <a href="javaexam.html">START JAVA EXAM NOW</a>
+                    <p>Object-oriented programming concepts and advanced Java features</p>
+                </button>
+                
+                <button class="course-btn html-btn">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML</h3>
+                    <a href="htmlexam.html">START HTML EXAM NOW</a>
+                    <p>Web page structure, semantic markup, and modern HTML5 features</p>
+                </button>
+                
+                <button class="course-btn js-btn">
+                    <i class="fab fa-js-square"></i>
+                    <h3>JavaScript</h3>
+                    <a href="javascriptexam.html">START JAVASCRIPT EXAM NOW</a>
+                    <p>Client-side scripting, DOM manipulation, and ES6+ features</p>
+                </button>
+                
+                <button class="course-btn mysql-btn">
+                    <i class="fas fa-database"></i>
+                    <h3>MySQL</h3>
+                    <a href="mysqlexam.html">START SQL EXAM NOW</a>
+                    <p>Database design, SQL queries, and relational database management</p>
+                </button>
+            </div>
+            
+            <a href="dashboard1.html" class="dashboard-btn">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+        </div>
+        
+        <footer>
+            <p>© 2025 <br>STRIDE</br></p> . All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add click event listeners to all course buttons
+        document.querySelectorAll('.course-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const courseName = this.querySelector('h3').textContent;
+                alert(`Starting ${courseName} exam...\nGood luck!`);
+                // In a real application, this would redirect to the actual exam page
+            });
+        });
+        
+        // Dashboard button functionality
+        document.querySelector('.dashboard-btn').addEventListener('click', function(e) {
+                        alert('Navigating to Dashboard...');
+            // In a real application, this would redirect to the dashboard
+        });
+    </script>
+</body>
+</html>

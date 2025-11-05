@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Course Exam</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define a color scheme inspired by Java's branding */
+        :root {
+            --primary: #5382a1; /* A strong blue */
+            --primary-dark: #3e637a;
+            --secondary: #f8981d; /* A golden orange */
+            --light: #000000;
+            --dark: #0003032f;
+            --card-bg: #ffffff;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --headercolor:rgb(36, 98, 213);
+            --green:green;
+    
+        }
+
+        /* Basic styling for all elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .exam-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 5px solid var(--primary-dark);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        main {
+            padding: 30px;
+        }
+
+        .question-card {
+            background-color: #f9f9f9;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .options label {
+            display: block;
+            background-color: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .options label:hover {
+            background-color: #f0f0f0;
+            border-color: var(--primary);
+        }
+        
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+
+        button.submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button.submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .result-message {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .result-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .result-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-box h2 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .result-box p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .result-box button {
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .result-box button:hover {
+            background-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <header>
+            <h1>Java Exam</h1>
+            <div id="timer" class="timer">10:00</div>
+        </header>
+        <main>
+            <form id="examForm" action="#">
+                <div id="questions-container" class="questions-container">
+                    <!-- Questions will be dynamically generated here -->
+                </div>
+                <button type="submit" class="submit-btn">Submit Exam</button>
+            </form>
+            <div id="resultMessage" class="result-message" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script>
+        const EXAM_DURATION = 3000; // 50 minutes in seconds
+        let timeRemaining = EXAM_DURATION;
+        let timer;
+        const examForm = document.getElementById('examForm');
+        const questionsContainer = document.getElementById('questions-container');
+        const timerDisplay = document.getElementById('timer');
+        const resultMessage = document.getElementById('resultMessage');
+        const EXAM_TYPE = 'Java_Exam';
+
+        const questions = [
+            {
+                question: "Which of the following is not a Java keyword?",
+                options: ["static", "Boolean", "private", "abstract"],
+                answer: "Boolean"
+            },
+            {
+                question: "Which of these is used to define an interface in Java?",
+                options: ["class", "interface", "intf", "implements"],
+                answer: "interface"
+            },
+            {
+                question: "What is the size of a long data type?",
+                options: ["4 bytes", "8 bytes", "2 bytes", "16 bytes"],
+                answer: "8 bytes"
+            },
+            {
+                question: "What is the entry point of a Java program?",
+                options: ["main() method", "start() method", "run() method", "init() method"],
+                answer: "main() method"
+            },
+            {
+                question: "Which of these is a correct way to create an object?",
+                options: ["MyClass obj = new MyClass();", "MyClass obj = MyClass();", "MyClass obj = new MyClass;", "new MyClass obj;"],
+                answer: "MyClass obj = new MyClass();"
+            },
+            {
+                question: "Which of these is not a type of inheritance in Java?",
+                options: ["Multiple", "Multilevel", "Hierarchical", "Single"],
+                answer: "Multiple"
+            },
+            {
+                question: "What is the default value of a boolean variable?",
+                options: ["null", "false", "true", "0"],
+                answer: "false"
+            },
+            {
+                question: "What is the use of the `final` keyword in a variable?",
+                options: ["It makes a variable constant", "It makes a variable accessible everywhere", "It makes a variable static", "It makes a variable non-static"],
+                answer: "It makes a variable constant"
+            },
+            {
+                question: "Which of these is used for multi-threading in Java?",
+                options: ["Runnable interface", "Thread class", "Both a and b", "None of the above"],
+                answer: "Both a and b"
+            },
+            {
+                question: "What is the purpose of the `super` keyword?",
+                options: ["To call a superclass method", "To call a subclass method", "To call a local variable", "To call a global variable"],
+                answer: "To call a superclass method"
+            },
+            {
+                question: "What is method overloading?",
+                options: ["Having multiple methods with the same name but different parameters", "Having multiple methods with the same name and parameters", "Having methods with different names but same parameters", "None of the above"],
+                answer: "Having multiple methods with the same name but different parameters"
+            },
+            {
+                question: "What is the superclass of all classes in Java?",
+                options: ["Object", "Class", "Main", "System"],
+                answer: "Object"
+            },
+            {
+                question: "Which of these is not a wrapper class?",
+                options: ["Integer", "String", "Double", "Boolean"],
+                answer: "String"
+            },
+            {
+                question: "What does JVM stand for?",
+                options: ["Java Virtual Machine", "Java Virtual Method", "Java Virtual Module", "Java Virtual Memory"],
+                answer: "Java Virtual Machine"
+            },
+            {
+                question: "What is the use of `public static void main(String args[])`?",
+                options: ["It is the entry point of any program", "It is the main method of the class", "It is a public method", "It is a static method"],
+                answer: "It is the entry point of any program"
+            },
+            {
+                question: "Which of these is not an access specifier in Java?",
+                options: ["public", "protected", "private", "friendly"],
+                answer: "friendly"
+            },
+            {
+                question: "What is the default value of an instance variable of type String?",
+                options: ["'' (empty string)", "null", "0", "false"],
+                answer: "null"
+            },
+            {
+                question: "Which collection class allows you to retrieve elements in the order they were inserted?",
+                options: ["HashSet", "TreeSet", "ArrayList", "LinkedList"],
+                answer: "ArrayList"
+            },
+            {
+                question: "What is the purpose of `finally` block?",
+                options: ["It is used to catch exceptions", "It is used to handle resources", "It is used to execute code after `try` and `catch` blocks", "It is used for garbage collection"],
+                answer: "It is used to execute code after `try` and `catch` blocks"
+            },
+            {
+                question: "What is the concept of a class with multiple constructors?",
+                options: ["Method Overriding", "Method Overloading", "Constructor Overloading", "Constructor Overriding"],
+                answer: "Constructor Overloading"
+            },
+            {
+                question: "What is the use of `this` keyword?",
+                options: ["Refers to the current class instance", "Refers to the superclass instance", "Refers to a static method", "Refers to a local variable"],
+                answer: "Refers to the current class instance"
+            },
+            {
+                question: "Which of these is used to create a package in Java?",
+                options: ["package", "pkg", "pack", "import"],
+                answer: "package"
+            },
+            {
+                question: "What is the primary function of `System.out.println()`?",
+                options: ["To read input from the user", "To write output to the console", "To create a new file", "To perform a system operation"],
+                answer: "To write output to the console"
+            },
+            {
+                question: "What is an abstract class?",
+                options: ["A class that cannot be instantiated", "A class with only abstract methods", "A class with a final method", "A class that cannot be extended"],
+                answer: "A class that cannot be instantiated"
+            },
+            {
+                question: "What is the difference between `==` and `.equals()` for objects?",
+                options: ["`==` compares content, `.equals()` compares references", "`==` compares references, `.equals()` compares content", "They are the same", "None of the above"],
+                answer: "`==` compares references, `.equals()` compares content"
+            },
+            {
+                question: "Which exception is thrown when you divide by zero?",
+                options: ["ArithmeticException", "NullPointerException", "IllegalArgumentException", "IOException"],
+                answer: "ArithmeticException"
+            },
+            {
+                question: "What is the name of the tool used to convert `.java` files to `.class` files?",
+                options: ["java", "javac", "javap", "javadoc"],
+                answer: "javac"
+            },
+            {
+                question: "Which of these is an example of encapsulation?",
+                options: ["Using public variables", "Using private variables with public getters and setters", "Inheritance", "Polymorphism"],
+                answer: "Using private variables with public getters and setters"
+            },
+            {
+                question: "What is the `main` method signature?",
+                options: ["public static void main(String[] args)", "public void main()", "static void main(String args[])", "private static void main(String args)"],
+                answer: "public static void main(String[] args)"
+            },
+            {
+                question: "What is the purpose of `break` statement?",
+                options: ["To terminate a loop or switch statement", "To skip to the next iteration of a loop", "To return a value from a method", "To exit the entire program"],
+                answer: "To terminate a loop or switch statement"
+            },
+            {
+                question: "What is the purpose of the `continue` statement?",
+                options: ["To terminate a loop", "To skip the current iteration and continue with the next", "To resume a paused thread", "None of the above"],
+                answer: "To skip the current iteration and continue with the next"
+            },
+            {
+                question: "Which of these is not a primitive data type?",
+                options: ["int", "char", "boolean", "String"],
+                answer: "String"
+            },
+            {
+                question: "How do you declare an array of integers?",
+                options: ["int arr[]", "int[] arr", "Both a and b", "array arr[]"],
+                answer: "Both a and b"
+            },
+            {
+                question: "What is a constructor?",
+                options: ["A method that is used to create objects", "A special method that is invoked automatically at the time of object creation", "A method that has the same name as its class", "Both b and c"],
+                answer: "Both b and c"
+            },
+            {
+                question: "What is polymorphism?",
+                options: ["The ability of an object to take on many forms", "The process of hiding implementation details", "A way to inherit properties from a parent class", "None of the above"],
+                answer: "The ability of an object to take on many forms"
+            },
+            {
+                question: "What is the difference between `throw` and `throws`?",
+                options: ["`throw` is for checked exceptions, `throws` is for unchecked exceptions", "`throw` is used to declare an exception, `throws` is used to explicitly throw one", "`throw` is used to explicitly throw an exception, `throws` is used to declare one", "They are the same"],
+                answer: "`throw` is used to explicitly throw an exception, `throws` is used to declare one"
+            },
+            {
+                question: "Which of these is a valid way to create a thread?",
+                options: ["Extending the `Thread` class", "Implementing the `Runnable` interface", "Both a and b", "None of the above"],
+                answer: "Both a and b"
+            },
+            {
+                question: "What is the correct way to import a class named `MyClass` from the `com.example.package`?",
+                options: ["import MyClass;", "import com.example.package.MyClass;", "import com.example.package;", "import java.util.MyClass;"],
+                answer: "import com.example.package.MyClass;"
+            },
+            {
+                question: "What is a `static` method?",
+                options: ["A method that can only be accessed by its class", "A method that belongs to the class rather than an object", "A method that cannot be overridden", "A method that is used for a single purpose"],
+                answer: "A method that belongs to the class rather than an object"
+            },
+            {
+                question: "Which keyword is used to prevent a method from being overridden?",
+                options: ["final", "static", "abstract", "public"],
+                answer: "final"
+            },
+            {
+                question: "What is the `instanceof` keyword used for?",
+                options: ["To check if an object is an instance of a class or interface", "To create a new instance of a class", "To check if a method is static", "To check if a variable is null"],
+                answer: "To check if an object is an instance of a class or interface"
+            },
+            {
+                question: "What is a package in Java?",
+                options: ["A folder that stores classes", "A collection of related classes and interfaces", "A way to organize code", "All of the above"],
+                answer: "All of the above"
+            },
+            {
+                question: "Which of the following is an example of an unchecked exception?",
+                options: ["IOException", "SQLException", "NullPointerException", "FileNotFoundException"],
+                answer: "NullPointerException"
+            },
+            {
+                question: "What is the purpose of the `volatile` keyword?",
+                options: ["To ensure a variable is stored in a permanent location", "To ensure a variable is accessed only by one thread", "To ensure that a variable is always read from main memory", "To ensure a variable is a constant"],
+                answer: "To ensure that a variable is always read from main memory"
+            },
+            {
+                question: "What is `string` in Java?",
+                options: ["A primitive data type", "A wrapper class", "A class", "A keyword"],
+                answer: "A class"
+            },
+            {
+                question: "Which of the following is true about abstract classes?",
+                options: ["They can be instantiated", "They must contain at least one abstract method", "They can have constructors", "They cannot have static methods"],
+                answer: "They can have constructors"
+            },
+            {
+                question: "Which of these is used to convert an object to a primitive data type?",
+                options: ["Unboxing", "Boxing", "Casting", "None of the above"],
+                answer: "Unboxing"
+            },
+            {
+                question: "What is the default access specifier for a method in a class?",
+                options: ["public", "private", "protected", "default (package)"],
+                answer: "default (package)"
+            },
+            {
+                question: "What is the purpose of `Java SE`?",
+                options: ["Java Standard Edition for desktop applications", "Java Enterprise Edition for web applications", "Java Micro Edition for mobile devices", "None of the above"],
+                answer: "Java Standard Edition for desktop applications"
+            },
+            {
+                question: "Which of these is a valid declaration of an array?",
+                options: ["int array = new int[10];", "int array[] = {1, 2, 3};", "int array[10];", "int array;"],
+                answer: "int array[] = {1, 2, 3};"
+            }
+        ];
+
+        function generateQuestions() {
+            questionsContainer.innerHTML = '';
+            questions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-card';
+                questionElement.innerHTML = `
+                    <h3>Question ${index + 1}: ${q.question}</h3>
+                    <div class="options">
+                        ${q.options.map((option, i) => `
+                            <label>
+                                <input type="radio" name="question-${index}" value="${option}" required>
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                questionsContainer.appendChild(questionElement);
+            });
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timer);
+                    submitExam();
+                } else {
+                    timeRemaining--;
+                }
+            }, 1000);
+        }
+
+        async function submitExam(event) {
+            if (event) event.preventDefault();
+            
+            const user_id = sessionStorage.getItem('user_id');
+
+            let correctAnswersCount = 0;
+            const userAnswers = [];
+
+            questions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : '';
+                
+                userAnswers.push({
+                    question: q.question,
+                    user_answer: userAnswer,
+                    correct_answer: q.answer
+                });
+
+                if (userAnswer === q.answer) {
+                    correctAnswersCount++;
+                }
+            });
+
+            const score = Math.round((correctAnswersCount / questions.length) * 100);
+            
+            await showResult('Submitting exam...', (score >= 70), score, userAnswers);
+            clearInterval(timer);
+        }
+
+        async function showResult(message, passed, score, answers) {
+            const user_id = sessionStorage.getItem('user_id');
+            if (!user_id) {
+                showResultMessage('You must be logged in to take the exam. Redirecting to login...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+                return;
+            }
+
+            showResultMessage('Submitting exam...', 'info');
+
+            try {
+                const response = await fetch('/api/submit-exam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: user_id,
+                        exam_type: EXAM_TYPE,
+                        score: score,
+                        answers: JSON.stringify(answers)
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    const resultHTML = `
+                        <div class="result-box">
+                            <h2>Exam Submitted!</h2>
+                            <p>Your Score: ${score}%</p>
+                            <button onclick="window.location.href='dashboard1.html'">Go to Dashboard</button>
+                        </div>
+                    `;
+                    questionsContainer.innerHTML = resultHTML;
+                    showResultMessage('Exam submitted successfully!', true);
+
+                } else {
+                    showResultMessage(`Error submitting exam: ${result.message}`, false);
+                    console.error('Server error:', result.message);
+                }
+            } catch (error) {
+                showResultMessage('Network error. Please try again.', false);
+                console.error('Exam submission error:', error);
+            }
+        }
+
+        function showResultMessage(message, isSuccess) {
+            resultMessage.textContent = message;
+            resultMessage.style.display = 'block';
+            resultMessage.className = `result-message ${isSuccess === true ? 'success' : 'error'}`;
+        }
+        
+        examForm.addEventListener('submit', submitExam);
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            const user_id = sessionStorage.getItem('user_id');
+            const name = sessionStorage.getItem('name');
+            
+            if (!user_id) {
+                showResultMessage('You must be logged in to take the exam. Redirecting to login...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } else {
+                document.title = `${name}'s Java Exam`;
+                generateQuestions();
+                startTimer();
+            }
+        });
+        
+        window.addEventListener('beforeunload', (e) => {
+            if (timeRemaining > 0 && timeRemaining < EXAM_DURATION) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        });
+    </script>
+</body>
+</html>

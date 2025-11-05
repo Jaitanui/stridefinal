@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Fundamentals: Elements, Attributes & Formatting</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #3a0ca3;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --text: #2b2d42;
+            --code-bg: #1e1e2e;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa, #e4edf9);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--dark), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--success);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234361ee" fill-opacity="0.05"/><path d="M0 0L100 100M100 0L0 100" stroke="%234361ee" stroke-opacity="0.1" stroke-width="1"/></svg>');
+        }
+        
+        .hero h2 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--dark), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text);
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin: 30px 0;
+            transition: var(--transition);
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card-header i {
+            font-size: 1.8rem;
+        }
+        
+        .card-content {
+            padding: 30px;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .code-panel, .result-panel {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .panel-header {
+            background: var(--dark);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .code-block {
+            background: var(--code-bg);
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+        
+        .tag {
+            color: #f92672;
+        }
+        
+        .attr {
+            color: #a6e22e;
+        }
+        
+        .value {
+            color: #e6db74;
+        }
+        
+        .comment {
+            color: #75715e;
+        }
+        
+        .result-panel .result-content {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            min-height: 200px;
+        }
+        
+        .formatting-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .formatting-card {
+            background: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .formatting-card h4 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .formatting-card h4 i {
+            color: var(--accent);
+        }
+        
+        .notes {
+            background: #e3f2fd;
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        .notes h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .key-points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .key-point {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <div class="logo-text">
+                    <h1>HTML Fundamentals</h1>
+                    <p>Master the building blocks of the web</p>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h2>HTML Core Concepts</h2>
+            <p>Learn the essential building blocks of HTML including elements, attributes, text formatting, and comments to create well-structured web pages.</p>
+        </div>
+    </section>
+    
+    <main class="container">
+        <!-- HTML Elements & Tags Section -->
+        <section id="elements" class="content-card">
+            <div class="card-header">
+                <i class="fas fa-cube"></i>
+                <h3>HTML Elements & Tags</h3>
+            </div>
+            <div class="card-content">
+                <p>HTML elements are the building blocks of web pages. An HTML element is defined by a start tag, content, and an end tag.</p>
+                
+                <div class="example-container">
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>HTML Code</span>
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="code-block">
+                            <span class="tag">&lt;tagname&gt;</span>Content goes here...<span class="tag">&lt;/tagname&gt;</span><br><br>
+                            
+                            <span class="comment">&lt;!-- Example paragraph element --&gt;</span><br>
+                            <span class="tag">&lt;p&gt;</span>This is a paragraph.<span class="tag">&lt;/p&gt;</span><br><br>
+                            
+                            <span class="comment">&lt;!-- Example link element --&gt;</span><br>
+                            <span class="tag">&lt;a</span> <span class="attr">href=</span><span class="value">"https://example.com"</span><span class="tag">&gt;</span>Visit Example<span class="tag">&lt;/a&gt;</span><br><br>
+                            
+                            <span class="comment">&lt;!-- Empty (self-closing) element --&gt;</span><br>
+                            <span class="tag">&lt;img</span> <span class="attr">src=</span><span class="value">"image.jpg"</span> <span class="attr">alt=</span><span class="value">"Description"</span><span class="tag">&gt;</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-panel">
+                        <div class="panel-header">
+                            <span>Result</span>
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="result-content">
+                            <p>This is a paragraph.</p>
+                            <p><a href="#" style="color: var(--primary);">Visit Example</a></p>
+                            <p><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'><rect width='100' height='60' fill='%234361ee' fill-opacity='0.2'/><text x='50' y='30' font-family='sans-serif' font-size='14' fill='%233a0ca3' text-anchor='middle'>Image Placeholder</text></svg>" alt="Description" style="max-width: 100%;"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <h4><i class="fas fa-lightbulb"></i> Key Points</h4>
+                    <ul>
+                        <li>Elements are defined with <strong>tags</strong>: &lt;tagname&gt; and &lt;/tagname&gt;</li>
+                        <li>Most elements have opening and closing tags</li>
+                        <li>Some elements are <strong>self-closing</strong> (void elements) like &lt;img&gt;, &lt;br&gt;, and &lt;input&gt;</li>
+                        <li>Elements can be nested inside other elements to create structure</li>
+                        <li>HTML documents are made of nested elements forming a tree structure (DOM)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- HTML Attributes Section -->
+        <section id="attributes" class="content-card">
+            <div class="card-header">
+                <i class="fas fa-cog"></i>
+                <h3>HTML Attributes</h3>
+            </div>
+            <div class="card-content">
+                <p>Attributes provide additional information about HTML elements. They are always specified in the start tag and usually come in name/value pairs like name="value".</p>
+                
+                <div class="example-container">
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>HTML Code</span>
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="code-block">
+                            <span class="comment">&lt;!-- Attributes provide additional info --&gt;</span><br>
+                            <span class="tag">&lt;img</span> <span class="attr">src=</span><span class="value">"photo.jpg"</span> <span class="attr">alt=</span><span class="value">"A beautiful landscape"</span> <span class="attr">width=</span><span class="value">"500"</span><span class="tag">&gt;</span><br><br>
+                            
+                            <span class="tag">&lt;a</span> <span class="attr">href=</span><span class="value">"https://example.com"</span> <span class="attr">target=</span><span class="value">"_blank"</span><span class="tag">&gt;</span>Open in new tab<span class="tag">&lt;/a&gt;</span><br><br>
+                            
+                            <span class="tag">&lt;div</span> <span class="attr">id=</span><span class="value">"main-content"</span> <span class="attr">class=</span><span class="value">"container highlighted"</span><span class="tag">&gt;</span><br>
+                            &nbsp;&nbsp;<span class="tag">&lt;p</span> <span class="attr">style=</span><span class="value">"color: blue;"</span><span class="tag">&gt;</span>Styled paragraph<span class="tag">&lt;/p&gt;</span><br>
+                            <span class="tag">&lt;/div&gt;</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-panel">
+                        <div class="panel-header">
+                            <span>Result</span>
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="result-content">
+                            <p><a href="#" target="_blank" style="color: var(--primary);">Open in new tab</a></p>
+                            <div id="main-content" class="container highlighted" style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                                <p style="color: blue;">Styled paragraph</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <h4><i class="fas fa-lightbulb"></i> Common Attributes</h4>
+                    <ul>
+                        <li><strong>id</strong> - Specifies a unique id for an element</li>
+                        <li><strong>class</strong> - Specifies one or more class names for an element (used for CSS and JavaScript)</li>
+                        <li><strong>style</strong> - Used for inline CSS styling</li>
+                        <li><strong>src</strong> - Specifies the source file path for elements like &lt;img&gt; and &lt;script&gt;</li>
+                        <li><strong>href</strong> - Specifies the URL for links (&lt;a&gt;)</li>
+                        <li><strong>alt</strong> - Alternative text for images</li>
+                        <li><strong>title</strong> - Provides additional information (tooltip)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Headings & Paragraphs Section -->
+        <section id="headings" class="content-card">
+            <div class="card-header">
+                <i class="fas fa-heading"></i>
+                <h3>Headings & Paragraphs</h3>
+            </div>
+            <div class="card-content">
+                <p>Headings and paragraphs are fundamental for structuring text content. HTML provides six levels of headings and the paragraph tag for text blocks.</p>
+                
+                <div class="example-container">
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>HTML Code</span>
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="code-block">
+                            <span class="tag">&lt;h1&gt;</span>Main Heading (Level 1)<span class="tag">&lt;/h1&gt;</span><br>
+                            <span class="tag">&lt;h2&gt;</span>Subheading (Level 2)<span class="tag">&lt;/h2&gt;</span><br>
+                            <span class="tag">&lt;h3&gt;</span>Sub-Subheading (Level 3)<span class="tag">&lt;/h3&gt;</span><br>
+                            <span class="tag">&lt;h4&gt;</span>Heading 4<span class="tag">&lt;/h4&gt;</span><br>
+                            <span class="tag">&lt;h5&gt;</span>Heading 5<span class="tag">&lt;/h5&gt;</span><br>
+                            <span class="tag">&lt;h6&gt;</span>Heading 6<span class="tag">&lt;/h6&gt;</span><br><br>
+                            
+                            <span class="tag">&lt;p&gt;</span>This is a paragraph. Paragraphs are used for blocks of text. They automatically create space before and after themselves.<span class="tag">&lt;/p&gt;</span><br>
+                            <span class="tag">&lt;p&gt;</span>This is another paragraph. You can have as many paragraphs as you need to structure your content.<span class="tag">&lt;/p&gt;</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-panel">
+                        <div class="panel-header">
+                            <span>Result</span>
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="result-content">
+                            <h1 style="font-size: 2rem; margin-bottom: 15px;">Main Heading (Level 1)</h1>
+                            <h2 style="font-size: 1.75rem; margin-bottom: 12px;">Subheading (Level 2)</h2>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Sub-Subheading (Level 3)</h3>
+                            <h4 style="font-size: 1.25rem; margin-bottom: 8px;">Heading 4</h4>
+                            <h5 style="font-size: 1.1rem; margin-bottom: 6px;">Heading 5</h5>
+                            <h6 style="font-size: 1rem; margin-bottom: 15px;">Heading 6</h6>
+                            <p>This is a paragraph. Paragraphs are used for blocks of text. They automatically create space before and after themselves.</p>
+                            <p>This is another paragraph. You can have as many paragraphs as you need to structure your content.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <h4><i class="fas fa-lightbulb"></i> Best Practices</h4>
+                    <ul>
+                        <li>Use headings in hierarchical order (h1 → h2 → h3, etc.)</li>
+                        <li>Have only one &lt;h1&gt; per page for SEO</li>
+                        <li>Use paragraphs for blocks of text instead of multiple line breaks</li>
+                        <li>Headings should describe the content that follows</li>
+                        <li>Don't use headings just to make text bigger - use CSS for styling</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Text Formatting Section -->
+        <section id="formatting" class="content-card">
+            <div class="card-header">
+                <i class="fas fa-text-height"></i>
+                <h3>Text Formatting</h3>
+            </div>
+            <div class="card-content">
+                <p>HTML provides various tags to format text with special meaning. These tags help create emphasis, importance, and other text effects.</p>
+                
+                <div class="formatting-grid">
+                    <div class="formatting-card">
+                        <h4><i class="fas fa-bold"></i> Bold Text</h4>
+                        <p>&lt;b&gt; - <b>Bold text without extra importance</b></p>
+                        <p>&lt;strong&gt; - <strong>Important text (semantic importance)</strong></p>
+                    </div>
+                    
+                    <div class="formatting-card">
+                        <h4><i class="fas fa-italic"></i> Italic Text</h4>
+                        <p>&lt;i&gt; - <i>Italic text for alternative voice</i></p>
+                        <p>&lt;em&gt; - <em>Emphasized text (semantic emphasis)</em></p>
+                    </div>
+                    
+                    <div class="formatting-card">
+                        <h4><i class="fas fa-underline"></i> Underline & Strikethrough</h4>
+                        <p>&lt;u&gt; - <u>Underlined text (non-textual annotation)</u></p>
+                        <p>&lt;del&gt; - <del>Deleted text</del> and &lt;ins&gt; - <ins>Inserted text</ins></p>
+                    </div>
+                    
+                    <div class="formatting-card">
+                        <h4><i class="fas fa-highlighter"></i> Highlighting & Small Text</h4>
+                        <p>&lt;mark&gt; - <mark>Highlighted text</mark></p>
+                        <p>&lt;small&gt; - <small>Smaller text (side comments)</small></p>
+                    </div>
+                    
+                    <div class="formatting-card">
+                        <h4><i class="fas fa-superscript"></i> Superscript & Subscript</h4>
+                        <p>&lt;sup&gt; - Superscript<sup>text</sup></p>
+                        <p>&lt;sub&gt; - Subscript<sub>text</sub></p>
+                    </div>
+                    
+                    <div class="formatting-card">
+                        <h4><i class="fas fa-quote-right"></i> Quotations</h4>
+                        <p>&lt;q&gt; - <q>Short inline quotation</q></p>
+                        <p>&lt;blockquote&gt; - <blockquote style="margin: 10px 0; padding-left: 15px; border-left: 3px solid var(--accent);">Block-level quotation</blockquote></p>
+                    </div>
+                </div>
+                
+                <div class="example-container">
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>HTML Code</span>
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="code-block">
+                            <span class="tag">&lt;p&gt;</span><br>
+                            &nbsp;&nbsp;This is <span class="tag">&lt;b&gt;</span>bold text<span class="tag">&lt;/b&gt;</span> and this is <span class="tag">&lt;strong&gt;</span>important text<span class="tag">&lt;/strong&gt;</span>.<br>
+                            &nbsp;&nbsp;This is <span class="tag">&lt;i&gt;</span>italic text<span class="tag">&lt;/i&gt;</span> and this is <span class="tag">&lt;em&gt;</span>emphasized text<span class="tag">&lt;/em&gt;</span>.<br>
+                            &nbsp;&nbsp;We have <span class="tag">&lt;mark&gt;</span>highlighted text<span class="tag">&lt;/mark&gt;</span> and <span class="tag">&lt;small&gt;</span>small text<span class="tag">&lt;/small&gt;</span>.<br>
+                            &nbsp;&nbsp;Chemical formula: H<span class="tag">&lt;sub&gt;</span>2<span class="tag">&lt;/sub&gt;</span>O<br>
+                            &nbsp;&nbsp;Mathematical power: 10<span class="tag">&lt;sup&gt;</span>3<span class="tag">&lt;/sup&gt;</span> = 1000<br>
+                            &nbsp;&nbsp;This is <span class="tag">&lt;del&gt;</span>deleted text<span class="tag">&lt;/del&gt;</span> and <span class="tag">&lt;ins&gt;</span>inserted text<span class="tag">&lt;/ins&gt;</span>.<br>
+                            <span class="tag">&lt;/p&gt;</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-panel">
+                        <div class="panel-header">
+                            <span>Result</span>
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="result-content">
+                            <p>
+                                This is <b>bold text</b> and this is <strong>important text</strong>.<br>
+                                This is <i>italic text</i> and this is <em>emphasized text</em>.<br>
+                                We have <mark>highlighted text</mark> and <small>small text</small>.<br>
+                                Chemical formula: H<sub>2</sub>O<br>
+                                Mathematical power: 10<sup>3</sup> = 1000<br>
+                                This is <del>deleted text</del> and <ins>inserted text</ins>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- HTML Comments Section -->
+        <section id="comments" class="content-card">
+            <div class="card-header">
+                <i class="fas fa-comment"></i>
+                <h3>HTML Comments</h3>
+            </div>
+            <div class="card-content">
+                <p>Comments are used to leave notes in your HTML code that aren't displayed in the browser. They help document your code and make it more maintainable.</p>
+                
+                <div class="example-container">
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>HTML Code</span>
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="code-block">
+                            <span class="comment">&lt;!-- This is a single-line comment --&gt;</span><br><br>
+                            
+                            <span class="comment">&lt;!-- </span><br>
+                            <span class="comment">This is a multi-line comment</span><br>
+                            <span class="comment">It can span several lines</span><br>
+                            <span class="comment">--&gt;</span><br><br>
+                            
+                            <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="value">"container"</span><span class="tag">&gt;</span><br>
+                            &nbsp;&nbsp;<span class="tag">&lt;h2&gt;</span>Section Title<span class="tag">&lt;/h2&gt;</span><br>
+                            &nbsp;&nbsp;<span class="comment">&lt;!-- TODO: Add content here --&gt;</span><br>
+                            <span class="tag">&lt;/div&gt;</span><br><br>
+                            
+                            <span class="comment">&lt;!-- </span><br>
+                            <span class="comment">Commenting out code:</span><br>
+                            <span class="comment">&lt;div&gt;</span><br>
+                            <span class="comment">&lt;p&gt;This code is temporarily disabled&lt;/p&gt;</span><br>
+                            <span class="comment">&lt;/div&gt;</span><br>
+                            <span class="comment">--&gt;</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-panel">
+                        <div class="panel-header">
+                            <span>Result</span>
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="result-content">
+                            <div class="container">
+                                <h2>Section Title</h2>
+                                <p>Notice that none of the comments appear in the rendered output.</p>
+                            </div>
+                            <p style="margin-top: 15px; font-style: italic;">Comments are only visible in the HTML source code.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes">
+                    <h4><i class="fas fa-lightbulb"></i> Why Use Comments?</h4>
+                    <ul>
+                        <li>Document your code for future reference</li>
+                        <li>Explain complex sections of code</li>
+                        <li>Temporarily disable code without deleting it</li>
+                        <li>Leave notes for other developers</li>
+                        <li>Mark sections of code (TODO, FIXME, etc.)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+             <p>Continue learning with CSS and JavaScript to create complete web experiences!</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add active class to current section in view
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.content-card');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                    link.style.background = 'rgba(255, 255, 255, 0.2)';
+                } else {
+                    link.style.background = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

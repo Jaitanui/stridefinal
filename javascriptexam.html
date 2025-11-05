@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Course Exam</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f0db4f; /* JavaScript yellow */
+            --primary-dark: #d8c439;
+            --secondary: #323330; /* JS black */
+            --light: #f5f5f5;
+            --dark: #333;
+            --card-bg: #fff;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --green:green;
+            --headercolor:rgb(36, 98, 213);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .exam-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: var(--secondary);
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #fcfcfc;
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+        }
+
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .question h2 {
+            margin-top: 0;
+            color: var(--dark);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .options-list li {
+            margin-bottom: 10px;
+        }
+
+        .options-list input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary);
+            color: var(--secondary);
+            font-weight: bold;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .result-message {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: all 0.5s ease;
+        }
+
+        .result-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <h1>JavaScript Course Exam</h1>
+        <div class="timer" id="timer">Time Remaining: 60:00</div>
+        
+        <form id="exam-form">
+            <!-- Questions will be dynamically added here -->
+        </form>
+
+        <button id="submit-btn" class="submit-btn">Submit Exam</button>
+        <div id="result-message" class="result-message"></div>
+    </div>
+
+    <script>
+        const EXAM_DURATION = 60 * 60; // 60 minutes in seconds
+        let timeRemaining = EXAM_DURATION;
+        let timerInterval;
+
+        // An object containing all the questions, their options, and the correct answer.
+        // This makes it easy to add or remove questions without changing the core logic.
+        const allQuestions = {
+            'q1': {
+                question: 'What is the correct syntax for a JavaScript comment?',
+                options: {
+                    A: '<!-- Comment -->',
+                    B: '// Comment',
+                    C: '/* Comment */',
+                    D: 'both B and C'
+                },
+                answer: 'D'
+            },
+            'q2': {
+                question: 'How do you declare a constant variable in JavaScript?',
+                options: {
+                    A: '`var`',
+                    B: '`let`',
+                    C: '`const`',
+                    D: '`static`'
+                },
+                answer: 'C'
+            },
+            'q3': {
+                question: 'Which of the following is used to call a function named "myFunction"?',
+                options: {
+                    A: '`call myFunction()`',
+                    B: '`myFunction()`',
+                    C: '`call.myFunction`',
+                    D: '`function myFunction()`'
+                },
+                answer: 'B'
+            },
+            'q4': {
+                question: 'Which operator is used for strict equality (checks both value and type)?',
+                options: {
+                    A: '`==`',
+                    B: '`===`',
+                    C: '`!=`',
+                    D: '`=`'
+                },
+                answer: 'B'
+            },
+            'q5': {
+                question: 'What is the purpose of the `typeof` operator?',
+                options: {
+                    A: 'To check if a variable is defined',
+                    B: 'To return the type of a variable',
+                    C: 'To convert a variable to a string',
+                    D: 'To assign a type to a variable'
+                },
+                answer: 'B'
+            },
+            'q6': {
+                question: 'What does the `JSON.stringify()` method do?',
+                options: {
+                    A: 'Parses a JSON string into a JavaScript object',
+                    B: 'Converts a JavaScript object to a JSON string',
+                    C: 'Formats a JSON string for readability',
+                    D: 'Validates a JSON string'
+                },
+                answer: 'B'
+            },
+            'q7': {
+                question: 'What is a closure in JavaScript?',
+                options: {
+                    A: 'A function that has no parameters',
+                    B: 'A function that is inside another function',
+                    C: 'A function that remembers its outer scope even after the outer function has returned',
+                    D: 'A function that is only used once'
+                },
+                answer: 'C'
+            },
+            'q8': {
+                question: 'How do you handle asynchronous operations in ES6 and later?',
+                options: {
+                    A: 'Callbacks',
+                    B: 'Promises and async/await',
+                    C: 'Synchronous loops',
+                    D: 'The `setTimeout` function'
+                },
+                answer: 'B'
+            },
+            'q9': {
+                question: 'Which method is used to remove the last element from an array?',
+                options: {
+                    A: '`shift()`',
+                    B: '`splice()`',
+                    C: '`pop()`',
+                    D: '`removeLast()`'
+                },
+                answer: 'C'
+            },
+            'q10': {
+                question: 'What is the DOM in web development?',
+                options: {
+                    A: 'A new CSS framework',
+                    B: 'A programming interface for HTML and XML documents',
+                    C: 'A database management system',
+                    D: 'A type of server'
+                },
+                answer: 'B'
+            },
+            'q11': {
+                question: 'What is the purpose of the `addEventListener` method?',
+                options: {
+                    A: 'To add a new element to the DOM',
+                    B: 'To listen for specific events on an element',
+                    C: 'To add an attribute to an HTML element',
+                    D: 'To change the content of an element'
+                },
+                answer: 'B'
+            },
+            'q12': {
+                question: 'Which loop is used to iterate over the properties of an object?',
+                options: {
+                    A: '`for` loop',
+                    B: '`while` loop',
+                    C: '`for...of` loop',
+                    D: '`for...in` loop'
+                },
+                answer: 'D'
+            },
+            'q13': {
+                question: 'What is a "callback hell"?',
+                options: {
+                    A: 'A JavaScript debugger tool',
+                    B: 'A deep nesting of functions in a series of asynchronous calls',
+                    C: 'An error in a promise chain',
+                    D: 'A type of loop that never ends'
+                },
+                answer: 'B'
+            },
+            'q14': {
+                question: 'Which of the following is NOT a falsy value in JavaScript?',
+                options: {
+                    A: '`0`',
+                    B: '`null`',
+                    C: '`[]`',
+                    D: '`""`'
+                },
+                answer: 'C'
+            },
+            'q15': {
+                question: 'What does the `splice()` method do to an array?',
+                options: {
+                    A: 'Adds elements to the end of an array',
+                    B: 'Removes elements from an array and/or adds new ones',
+                    C: 'Sorts the elements of an array',
+                    D: 'Merges two arrays'
+                },
+                answer: 'B'
+            },
+            'q16': {
+                question: 'Which ES6 feature is used to define a class?',
+                options: {
+                    A: '`function`',
+                    B: '`class`',
+                    C: '`constructor`',
+                    D: '`object`'
+                },
+                answer: 'B'
+            },
+            'q17': {
+                question: 'What is the purpose of the `map()` method?',
+                options: {
+                    A: 'To iterate over an array and execute a function for each element',
+                    B: 'To create a new array with the results of calling a function for every array element',
+                    C: 'To remove elements from an array',
+                    D: 'To check if an element exists in an array'
+                },
+                answer: 'B'
+            },
+            'q18': {
+                question: 'Which built-in method returns the length of a string?',
+                options: {
+                    A: '`length()`',
+                    B: '`size()`',
+                    C: '`len()`',
+                    D: '`length`'
+                },
+                answer: 'D'
+            },
+            'q19': {
+                question: 'What does the `this` keyword refer to?',
+                options: {
+                    A: 'The current function',
+                    B: 'The object that is currently being executed',
+                    C: 'The global window object',
+                    D: 'The parent function'
+                },
+                answer: 'B'
+            },
+            'q20': {
+                question: 'How do you create a new array in JavaScript?',
+                options: {
+                    A: '`var arr = {};`',
+                    B: '`var arr = new Array();`',
+                    C: '`var arr = [];`',
+                    D: 'Both B and C'
+                },
+                answer: 'D'
+            },
+            'q21': {
+                question: 'What is a "higher-order function"?',
+                options: {
+                    A: 'A function that takes another function as an argument or returns a function',
+                    B: 'A function that runs faster than other functions',
+                    C: 'A function that is defined at a higher level in the file',
+                    D: 'A function that has a `return` statement'
+                },
+                answer: 'A'
+            },
+            'q22': {
+                question: 'What is the purpose of `event.preventDefault()`?',
+                options: {
+                    A: 'To stop the event from bubbling up to parent elements',
+                    B: 'To prevent the browser\'s default action for a given event',
+                    C: 'To stop an asynchronous operation',
+                    D: 'To prevent a function from being executed'
+                },
+                answer: 'B'
+            },
+            'q23': {
+                question: 'Which of the following is a way to create an object in JavaScript?',
+                options: {
+                    A: 'Object literal notation `{}`',
+                    B: 'Using the `new Object()` constructor',
+                    C: 'Using the `Object.create()` method',
+                    D: 'All of the above'
+                },
+                answer: 'D'
+            },
+            'q24': {
+                question: 'What is the difference between `let` and `var`?',
+                options: {
+                    A: '`var` is block-scoped, `let` is function-scoped',
+                    B: '`let` is block-scoped, `var` is function-scoped',
+                    C: '`let` can be redeclared, `var` cannot',
+                    D: 'There is no difference'
+                },
+                answer: 'B'
+            },
+            'q25': {
+                question: 'What is the purpose of the `filter()` method?',
+                options: {
+                    A: 'To create a new array with all elements that pass a test',
+                    B: 'To remove all elements that do not pass a test',
+                    C: 'To find the first element that passes a test',
+                    D: 'To check if any element passes a test'
+                },
+                answer: 'A'
+            },
+            'q26': {
+                question: 'How do you check the type of a variable in JavaScript?',
+                options: {
+                    A: '`typeOf`',
+                    B: '`checkType()`',
+                    C: '`typeof`',
+                    D: '`instanceof`'
+                },
+                answer: 'C'
+            },
+            'q27': {
+                question: 'What is a promise in JavaScript?',
+                options: {
+                    A: 'A guarantee that a function will not fail',
+                    B: 'An object representing the eventual completion or failure of an asynchronous operation',
+                    C: 'A new type of loop',
+                    D: 'A way to handle synchronous code'
+                },
+                answer: 'B'
+            },
+            'q28': {
+                question: 'What is the difference between `==` and `===`?',
+                options: {
+                    A: '`==` checks value only, `===` checks both value and type',
+                    B: '`===` checks value only, `==` checks both value and type',
+                    C: 'They are identical',
+                    D: '`==` is for numbers, `===` is for strings'
+                },
+                answer: 'A'
+            },
+            'q29': {
+                question: 'What is the `forEach` method used for?',
+                options: {
+                    A: 'To create a new array',
+                    B: 'To execute a provided function once for each array element',
+                    C: 'To return a new array with filtered elements',
+                    D: 'To remove elements from an array'
+                },
+                answer: 'B'
+            },
+            'q30': {
+                question: 'What is the purpose of the `super` keyword in a class?',
+                options: {
+                    A: 'To call a method on a parent class',
+                    B: 'To create a new instance of a class',
+                    C: 'To access a global variable',
+                    D: 'To define a static method'
+                },
+                answer: 'A'
+            },
+            'q31': {
+                question: 'Which method is used to add an element to the beginning of an array?',
+                options: {
+                    A: '`push()`',
+                    B: '`pop()`',
+                    C: '`unshift()`',
+                    D: '`shift()`'
+                },
+                answer: 'C'
+            },
+            'q32': {
+                question: 'What is hoisting in JavaScript?',
+                options: {
+                    A: 'A type of error that occurs during compilation',
+                    B: 'The process of moving variable and function declarations to the top of their scope before execution',
+                    C: 'A way to write recursive functions',
+                    D: 'A method for optimizing code'
+                },
+                answer: 'B'
+            },
+            'q33': {
+                question: 'What is the difference between `null` and `undefined`?',
+                options: {
+                    A: '`null` is an empty object, `undefined` means a variable has not been assigned a value',
+                    B: 'They are the same',
+                    C: '`undefined` is an empty object, `null` means a variable has not been assigned a value',
+                    D: 'They are different data types but represent the same value'
+                },
+                answer: 'A'
+            },
+            'q34': {
+                question: 'How do you check if an array includes a specific element?',
+                options: {
+                    A: '`array.contains()`',
+                    B: '`array.has()`',
+                    C: '`array.includes()`',
+                    D: '`array.find()`'
+                },
+                answer: 'C'
+            },
+            'q35': {
+                question: 'What does the `JSON.parse()` method do?',
+                options: {
+                    A: 'Converts a JavaScript object to a JSON string',
+                    B: 'Parses a JSON string into a JavaScript object',
+                    C: 'Validates a JSON string',
+                    D: 'Converts an object into a string'
+                },
+                answer: 'B'
+            },
+            'q36': {
+                question: 'Which operator is used to concatenate strings?',
+                options: {
+                    A: '`*`',
+                    B: '`+`',
+                    C: '`-`',
+                    D: '`&`'
+                },
+                answer: 'B'
+            },
+            'q37': {
+                question: 'What is a template literal in JavaScript?',
+                options: {
+                    A: 'A way to define functions',
+                    B: 'A special type of array',
+                    C: 'A way to embed expressions within strings using backticks',
+                    D: 'A new way to define objects'
+                },
+                answer: 'C'
+            },
+            'q38': {
+                question: 'How do you find the first element that satisfies a condition in an array?',
+                options: {
+                    A: '`find()`',
+                    B: '`filter()`',
+                    C: '`map()`',
+                    D: '`reduce()`'
+                },
+                answer: 'A'
+            },
+            'q39': {
+                question: 'What is the purpose of the `async` keyword?',
+                options: {
+                    A: 'To make a function run faster',
+                    B: 'To declare a function as asynchronous, allowing `await` to be used inside it',
+                    C: 'To make an entire program asynchronous',
+                    D: 'To stop a function from executing synchronously'
+                },
+                answer: 'B'
+            },
+            'q40': {
+                question: 'What is the correct way to write an arrow function with a single parameter?',
+                options: {
+                    A: '`(param) => { ... }`',
+                    B: '`param => { ... }`',
+                    C: '`() => { ... }`',
+                    D: 'Both A and B'
+                },
+                answer: 'D'
+            },
+            'q41': {
+                question: 'What is the purpose of the `bind()` method?',
+                options: {
+                    A: 'To create a new function with the `this` keyword set to a specific value',
+                    B: 'To execute a function immediately',
+                    C: 'To attach an event listener to an element',
+                    D: 'To convert a function into a string'
+                },
+                answer: 'A'
+            },
+            'q42': {
+                question: 'What does `Object.keys()` return?',
+                options: {
+                    A: 'An array of a given object\'s own enumerable property names',
+                    B: 'An array of a given object\'s values',
+                    C: 'A string containing all the keys',
+                    D: 'The number of keys in an object'
+                },
+                answer: 'A'
+            },
+            'q43': {
+                question: 'What is the purpose of the `setTimeout()` function?',
+                options: {
+                    A: 'To execute a function repeatedly at a set interval',
+                    B: 'To execute a function after a specified delay',
+                    C: 'To stop the execution of a function',
+                    D: 'To set the system time'
+                },
+                answer: 'B'
+            },
+            'q44': {
+                question: 'Which of the following is a valid way to create an array of numbers?',
+                options: {
+                    A: '`var numbers = "1, 2, 3";`',
+                    B: '`var numbers = (1, 2, 3);`',
+                    C: '`var numbers = [1, 2, 3];`',
+                    D: '`var numbers = {1, 2, 3};`'
+                },
+                answer: 'C'
+            },
+            'q45': {
+                question: 'What is a `spread` operator (`...`) used for?',
+                options: {
+                    A: 'To combine objects or arrays',
+                    B: 'To copy and expand iterables',
+                    C: 'To destructure arrays',
+                    D: 'Both A and B'
+                },
+                answer: 'D'
+            },
+            'q46': {
+                question: 'What is `destructuring` in JavaScript?',
+                options: {
+                    A: 'A way to break down code into smaller pieces',
+                    B: 'A shorthand syntax for extracting values from arrays or objects',
+                    C: 'A method to delete objects',
+                    D: 'A way to change the structure of a class'
+                },
+                answer: 'B'
+            },
+            'q47': {
+                question: 'What is the purpose of the `reduce()` method?',
+                options: {
+                    A: 'To reduce the size of an array',
+                    B: 'To remove duplicates from an array',
+                    C: 'To execute a reducer function on each element of the array, resulting in a single output value',
+                    D: 'To iterate over an array'
+                },
+                answer: 'C'
+            },
+            'q48': {
+                question: 'Which event is triggered when a user clicks on an HTML element?',
+                options: {
+                    A: '`onchange`',
+                    B: '`onmouseover`',
+                    C: '`onclick`',
+                    D: '`onkeypress`'
+                },
+                answer: 'C'
+            },
+            'q49': {
+                question: 'What is the correct way to get a reference to an HTML element by its ID?',
+                options: {
+                    A: '`document.getElementById()`',
+                    B: '`document.getElementByClass()`',
+                    C: '`document.queryElement()`',
+                    D: '`document.findElementById()`'
+                },
+                answer: 'A'
+            },
+            'q50': {
+                question: 'What is the `fetch()` API used for?',
+                options: {
+                    A: 'To manipulate the DOM',
+                    B: 'To make asynchronous network requests',
+                    C: 'To perform calculations',
+                    D: 'To handle user input'
+                },
+                answer: 'B'
+            },
+            'q51': {
+                question: 'What is the purpose of the `try...catch` block?',
+                options: {
+                    A: 'To define a loop',
+                    B: 'To handle potential errors in the code',
+                    C: 'To declare a new variable',
+                    D: 'To create a new function'
+                },
+                answer: 'B'
+            },
+            'q52': {
+                question: 'What does the `return` statement do in a function?',
+                options: {
+                    A: 'Stops the function from executing',
+                    B: 'Specifies the value to be returned by the function',
+                    C: 'Calls another function',
+                    D: 'Both A and B'
+                },
+                answer: 'D'
+            }
+        };
+
+        function renderQuestions() {
+            const form = document.getElementById('exam-form');
+            form.innerHTML = '';
+            // Convert the question object into an array for easier iteration
+            const questions = Object.keys(allQuestions).map(key => ({ id: key, ...allQuestions[key] }));
+
+            questions.forEach(q => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<h2>${q.question}</h2>`;
+
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options-list';
+
+                for (const option in q.options) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <input type="radio" name="${q.id}" value="${option}">
+                        <label>${option}. ${q.options[option]}</label>
+                    `;
+                    optionsList.appendChild(listItem);
+                }
+
+                questionDiv.appendChild(optionsList);
+                form.appendChild(questionDiv);
+            });
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerElement.textContent = `Time Remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = 'Time Up!';
+                    submitExam();
+                }
+                timeRemaining--;
+            }, 1000);
+        }
+
+        async function submitExam() {
+            clearInterval(timerInterval); // Stop the timer
+
+            const form = document.getElementById('exam-form');
+            const answers = {};
+            let score = 0;
+            const questionKeys = Object.keys(allQuestions);
+
+            questionKeys.forEach(key => {
+                const selectedOption = form.querySelector(`input[name="${key}"]:checked`);
+                answers[key] = selectedOption ? selectedOption.value : null;
+
+                if (selectedOption && selectedOption.value === allQuestions[key].answer) {
+                    score++;
+                }
+            });
+
+            // Get user info from localStorage to maintain login session
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') == 'true';
+            const user_id = sessionStorage.getItem('user_id');
+            const name = sessionStorage.getItem('name');
+            
+            const exam_type = 'JavaScript';
+            const submission_date = new Date();
+            
+            // Format the date to 'YYYY-MM-DD HH:MM:SS'
+            const formattedDate = submission_date.toISOString().slice(0, 19).replace('T', ' ');
+
+            const examData = {
+                user_id,
+                exam_type,
+                score,
+                answers: JSON.stringify(answers), // Stringify the answers object
+                submission_date: formattedDate // Use the formatted date
+            };
+            
+            try {
+                const response = await fetch('/api/submit-exam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(examData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(`Exam submitted successfully! Your score is ${score} out of ${questionKeys.length}.`, true);
+                } else {
+                    showResult(`Error: ${result.message}`, false);
+                }
+            } catch (error) {
+                showResult('Network error. Please try again.', false);
+                console.error('Exam submission error:', error);
+            }
+        }
+        
+        function showResult(message, isSuccess) {
+            const resultDiv = document.getElementById('result-message');
+            resultDiv.textContent = message;
+            resultDiv.className = `result-message ${isSuccess ? 'success' : 'error'}`;
+            resultDiv.style.display = 'block';
+        }
+        
+        // Event listeners
+        document.getElementById('submit-btn').addEventListener('click', submitExam);
+        
+        // Start the timer and render questions when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+           // Get user info from sessionStorage
+           const isLoggedIn = sessionStorage.getItem('isLoggedIn') == 'true';
+           const user_id = sessionStorage.getItem('user_id');
+           const name = sessionStorage.getItem('name');
+            
+            if (!user_id) {
+                showResult('You must be logged in to take the exam. Redirecting to login...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } else {
+                document.title = `${name}'s JavaScript Exam`;
+                renderQuestions(); // Render questions on load
+                startTimer();
+            }
+        });
+        
+        // Prevent accidental refresh
+        window.addEventListener('beforeunload', (e) => {
+            if (timeRemaining > 0 && timeRemaining < EXAM_DURATION) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        });
+    </script>
+</body>
+</html>

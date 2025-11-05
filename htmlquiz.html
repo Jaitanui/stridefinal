@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Programming Test</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General styling for the quiz container and body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, white, white);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .test-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        
+        /* Header and timer styles */
+        header {
+            background: linear-gradient(135deg, green, rgb(36, 98, 213));
+            color: white;
+            padding: 25px 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .timer-bar-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .timer-bar {
+            height: 100%;
+            background-color: white;
+            transition: width 0.3s linear;
+        }
+        
+        /* Questions and options styling */
+        .questions-container {
+            padding: 40px;
+        }
+        
+        .question-card {
+            background-color: #f7f9fc;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .option-item {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option-item:hover {
+            background-color: #dbe4e6;
+            transform: translateX(5px);
+        }
+        
+        .option-item.selected {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
+        }
+        
+        /* Navigation button styles */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .navigation-buttons button {
+            padding: 12px 25px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .navigation-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+        }
+        
+        .navigation-buttons button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        #submit-btn {
+            background-color: #e67e22;
+        }
+        
+        #submit-btn:hover {
+            background-color: #d35400;
+        }
+        
+        /* Custom modal/message box for non-alert messages */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Result card styling */
+        .result-card {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .result-card h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .result-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .result-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .result-card button {
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="message-box" id="message-box"></div>
+
+    <div class="test-container">
+        <header>
+            <h1>HTML Programming Test</h1>
+            <p>Answer all 20 questions below.</p>
+            <div class="timer-bar-container">
+                <div class="timer-bar" id="timer-bar"></div>
+            </div>
+        </header>
+        
+        <main class="questions-container">
+            <!-- Questions will be dynamically loaded here by JavaScript -->
+            <div class="question-card">
+                <h2 class="question-title" id="question-text"></h2>
+                <ul class="options-list" id="options-list"></ul>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button id="prev-btn" disabled>Previous</button>
+                <button id="next-btn">Next</button>
+                <button id="submit-btn" style="display: none;">Submit Test</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Array of 20 HTML questions
+            const questions = [
+                {
+                    question: "What does HTML stand for?",
+                    options: ["Hyper Text Markup Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language", "Hyper Tool Multi Language"],
+                    answer: "Hyper Text Markup Language"
+                },
+                {
+                    question: "Which HTML tag is used to define an internal style sheet?",
+                    options: ["<script>", "<style>", "<link>", "<css>"],
+                    answer: "<style>"
+                },
+                {
+                    question: "Which of these tags are for creating a list that is ordered (numbered)?",
+                    options: ["<ul>", "<dl>", "<li>", "<ol>"],
+                    answer: "<ol>"
+                },
+                {
+                    question: "What is the correct HTML for adding a background color?",
+                    options: ["<body bg='yellow'>", "<body style='background-color:yellow;'>", "<body color='yellow'>", "<background>yellow</background>"],
+                    answer: "<body style='background-color:yellow;'>"
+                },
+                {
+                    question: "What is the correct HTML element for inserting a line break?",
+                    options: ["<lb>", "<br>", "<break>", "<line>"],
+                    answer: "<br>"
+                },
+                {
+                    question: "Choose the correct HTML tag for the largest heading.",
+                    options: ["<head>", "<h6>", "<heading>", "<h1>"],
+                    answer: "<h1>"
+                },
+                {
+                    question: "Which HTML attribute is used to specify the URL of a page the link goes to?",
+                    options: ["src", "link", "href", "url"],
+                    answer: "href"
+                },
+                {
+                    question: "Which of these is not an HTML tag?",
+                    options: ["<p>", "<div>", "<myclass>", "<span>"],
+                    answer: "<myclass>"
+                },
+                {
+                    question: "Which element is used to get highlighted text in HTML5?",
+                    options: ["<highlight>", "<b>", "<mark>", "<hightlighted>"],
+                    answer: "<mark>"
+                },
+                {
+                    question: "Which element is used for a container for content that is to be displayed as a block of text or a block of elements?",
+                    options: ["<p>", "<div>", "<span>", "<a>"],
+                    answer: "<div>"
+                },
+                {
+                    question: "What is the correct HTML element for playing audio files?",
+                    options: ["<sound>", "<audio>", "<mp3>", "<play>"],
+                    answer: "<audio>"
+                },
+                {
+                    question: "What is the correct HTML element for playing video files?",
+                    options: ["<video>", "<movie>", "<media>", "<play>"],
+                    answer: "<video>"
+                },
+                {
+                    question: "Which HTML tag is used to define a client-side script?",
+                    options: ["<script>", "<js>", "<javascript>", "<code>"],
+                    answer: "<script>"
+                },
+                {
+                    question: "What does the `alt` attribute do for an image?",
+                    options: ["It specifies the image's alignment.", "It provides alternative text for screen readers.", "It specifies the source of the image.", "It defines the image's title."],
+                    answer: "It provides alternative text for screen readers."
+                },
+                {
+                    question: "Which HTML element is used to define a table row?",
+                    options: ["<td>", "<tr>", "<th>", "<table>"],
+                    answer: "<tr>"
+                },
+                {
+                    question: "Which tag is used to create a hyperlink?",
+                    options: ["<link>", "<a>", "<href>", "<url>"],
+                    answer: "<a>"
+                },
+                {
+                    question: "Which of the following HTML tags is used to create a numbered list?",
+                    options: ["<ul>", "<ol>", "<li class='ordered'>", "<dl>"],
+                    answer: "<ol>"
+                },
+                {
+                    question: "What is the purpose of the HTML `head` tag?",
+                    options: ["To contain the main content of the document.", "To contain metadata about the document.", "To define the document's body.", "To specify a document's title."],
+                    answer: "To contain metadata about the document."
+                },
+                {
+                    question: "How do you add a comment in HTML?",
+                    options: ["// This is a comment", "<!-- This is a comment -->", "/* This is a comment */", "# This is a comment"],
+                    answer: "<!-- This is a comment -->"
+                },
+                {
+                    question: "Which attribute specifies a unique identifier for an HTML element?",
+                    options: ["class", "id", "name", "tag"],
+                    answer: "id"
+                }
+            ];
+
+            // Global variables
+            let currentQuestionIndex = 0;
+            let userAnswers = [];
+            const timeLimit = 120; // 2 minutes for 20 questions
+            let timeLeft = timeLimit;
+            let timer;
+            
+            // DOM elements
+            const questionText = document.getElementById('question-text');
+            const optionsList = document.getElementById('options-list');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const timerBar = document.getElementById('timer-bar');
+            const messageBox = document.getElementById('message-box');
+
+            // Function to show a temporary message
+            function showMessage(message, type = 'error') {
+                messageBox.textContent = message;
+                messageBox.style.display = 'block';
+                messageBox.style.backgroundColor = type === 'success' ? '#2ecc71' : '#e74c3c';
+                setTimeout(() => {
+                    messageBox.style.display = 'none';
+                }, 3000);
+            }
+
+            // Function to load a question
+            function loadQuestion() {
+                const currentQuestion = questions[currentQuestionIndex];
+                questionText.textContent = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+                
+                optionsList.innerHTML = '';
+                
+                // Shuffle options to prevent users from memorizing the order
+                const shuffledOptions = [...currentQuestion.options];
+                shuffleArray(shuffledOptions);
+
+                shuffledOptions.forEach(option => {
+                    const li = document.createElement('li');
+                    li.classList.add('option-item');
+                    li.textContent = option;
+                    li.addEventListener('click', () => handleAnswer(option, li));
+                    
+                    if (userAnswers[currentQuestionIndex] === option) {
+                        li.classList.add('selected');
+                    }
+                    
+                    optionsList.appendChild(li);
+                });
+
+                // Update navigation button states
+                prevBtn.disabled = currentQuestionIndex === 0;
+                nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+                
+                // Show/hide submit button on the last question
+                submitBtn.style.display = (currentQuestionIndex === questions.length - 1) ? 'block' : 'none';
+            }
+
+            // Function to handle the user's answer selection
+            function handleAnswer(selectedOption, selectedElement) {
+                userAnswers[currentQuestionIndex] = selectedOption;
+                
+                const optionItems = optionsList.querySelectorAll('.option-item');
+                optionItems.forEach(item => item.classList.remove('selected'));
+                
+                selectedElement.classList.add('selected');
+            }
+
+            // Function to navigate to the next question
+            function nextQuestion() {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }
+            }
+
+            // Function to navigate to the previous question
+            function prevQuestion() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    loadQuestion();
+                }
+            }
+
+            // Function to calculate the final score
+            function calculateScore() {
+                let correctAnswers = 0;
+                const answersArray = [];
+
+                questions.forEach((question, index) => {
+                    const userAnswer = userAnswers[index];
+                    const isCorrect = userAnswer === question.answer;
+                    
+                    answersArray.push({
+                        question: question.question,
+                        userAnswer: userAnswer || "Not Answered",
+                        correctAnswer: question.answer,
+                        isCorrect: isCorrect
+                    });
+
+                    if (isCorrect) {
+                        correctAnswers++;
+                    }
+                });
+
+                const totalQuestions = questions.length;
+                const scorePercentage = (correctAnswers / totalQuestions) * 100;
+
+                return {
+                    score: correctAnswers,
+                    total: totalQuestions,
+                    percentage: scorePercentage,
+                    answers: answersArray
+                };
+            }
+
+            // Function to submit the exam results to the server
+            async function submitExam(examData) {
+                try {
+                    const response = await fetch('/api/submit-exam', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(examData)
+                    });
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        console.log('Exam submitted successfully:', result.message);
+                    } else {
+                        console.error('Failed to submit exam:', result.message);
+                    }
+                } catch (error) {
+                    console.error('Network error during exam submission:', error);
+                }
+            }
+            
+            // Function to shuffle an array
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Event listeners for navigation buttons
+            nextBtn.addEventListener('click', nextQuestion);
+            prevBtn.addEventListener('click', prevQuestion);
+            
+            submitBtn.addEventListener('click', () => {
+                // Stop the timer
+                clearInterval(timer);
+
+                // Calculate the final results
+                const results = calculateScore();
+                
+                // Construct the exam data object
+                const examData = {
+                    user_id: localStorage.getItem('user_id'),
+                    exam_type: 'html',
+                    score: results.score,
+                    answers: JSON.stringify(results.answers)
+                };
+
+                // Submit the exam to the server
+                submitExam(examData);
+                
+                // Display the results on the page
+                const percentage = results.percentage;
+                const passed = percentage >= 70;
+                
+                const resultHTML = `
+                    <div class="result-card">
+                        <h2>Test Completed!</h2>
+                        <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 20px; color: ${passed ? '#27ae60' : '#c0392b'};">
+                            Your Score: ${results.score} / ${results.total}
+                        </div>
+                        <div style="font-size: 1.2rem; margin-bottom: 20px; color: #7f8c8d;">
+                            ${percentage.toFixed(1)}% - ${passed ? 'Passed' : 'Failed'}
+                        </div>
+                        <p style="margin-bottom: 30px; font-size: 1.1rem; line-height: 1.6;">
+                            ${passed ? 
+                              'Congratulations! You have passed the HTML programming test.' : 
+                              'Review HTML fundamentals and try again. A passing score is 70%.'}
+                        </p>
+                        <button onclick="location.reload()" style="
+                            padding: 12px 30px;
+                            background: #3498db;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+                
+                document.querySelector('.questions-container').innerHTML = resultHTML;
+            });
+
+            // Timer functionality
+            function updateTimer() {
+                timeLeft--;
+                const percentage = (timeLeft / timeLimit) * 100;
+                timerBar.style.width = `${percentage}%`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showMessage("Time's up! Submitting your test.");
+                    // Programmatically click the submit button
+                    submitBtn.click();
+                }
+            }
+
+            // Initial load
+            loadQuestion();
+            timer = setInterval(updateTimer, 1000);
+        });
+    </script>
+</body>
+</html>

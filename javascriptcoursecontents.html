@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stride - JavaScript Course Curriculum</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(to right, green, rgb(36,98,213));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(30deg);
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #4CAF50;
+            padding: 12px;
+            border-left: 5px solid #2E7D32;
+            margin: 30px 0 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        h3 {
+            color: #2c5282;
+            margin: 20px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px dotted #2E7D32;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .module {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .topic-list {
+            list-style-type: none;
+            margin: 15px 0;
+        }
+        
+        .topic-list li {
+            padding: 10px 5px 10px 40px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            position: relative;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .topic-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        th {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #edf2f7;
+        }
+        
+        .note {
+            background-color: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+            position: relative;
+        }
+        
+        .note::before {
+            content: 'ℹ️';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1890ff;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e53e3e;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #718096;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #4CAF50;
+            color: #4CAF50;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            pre {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        .progress-container {
+            background: #e2e8f0;
+            border-radius: 50px;
+            height: 12px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            border-radius: 50px;
+            height: 100%;
+            width: 75%; /* Example progress */
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            margin-right: 15px;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge-new {
+            background-color: #ff4d4f;
+            color: white;
+        }
+        
+        .badge-advanced {
+            background-color: #722ed1;
+            color: white;
+        }
+        
+        .badge-basic {
+            background-color: #52c41a;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">STRIDE</div>
+        <h1>JavaScript Course Curriculum</h1>
+        <p>Master Web Development with Our Comprehensive JavaScript Program</p>
+    </header>
+    
+    <div class="container">
+        <section class="module">
+            <h2>Course Introduction</h2>
+            <p>Stride offers a comprehensive, beginner-friendly JavaScript tutorial that requires no prior programming experience. Our course is designed with bite-sized, simple, and easy-to-understand content that has been proven effective by thousands of students :cite[1].</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            
+            <div class="note">
+                <p><strong>Note:</strong> JavaScript is the programming language of the Web, and one of the 3 languages all web developers must learn: HTML to define content, CSS to specify layout, and JavaScript to program behavior :cite[1].</p>
+            </div>
+            
+            <h3>What is JavaScript?</h3>
+            <p>JavaScript is the programming language of the Web that makes web pages dynamic and interactive. JavaScript is easy to learn and is already running in your browser, tablet, and smartphone - no download needed :cite[1].</p>
+            
+            <a href="#" class="btn"><i class="fas fa-play-circle"></i> Start Learning</a>
+            <a href="#" class="btn btn-outline"><i class="fas fa-download"></i> Download Syllabus</a>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">1</span>JavaScript Basics</h2>
+            <p>This foundational module covers the essential building blocks of JavaScript programming.</p>
+            
+            <ul class="topic-list">
+                <li>JS Introduction and Where To place JavaScript code</li>
+                <li>JS Output methods (alert, console.log, document.write)</li>
+                <li>JS Statements and Syntax rules</li>
+                <li>JS Comments (single-line and multi-line)</li>
+                <li>JS Variables (var, let, const) :cite[1]</li>
+                <li>JS Operators (arithmetic, assignment, comparison, logical)</li>
+                <li>JS Data Types (strings, numbers, booleans, objects)</li>
+                <li>JS Type Conversion and typeof operator</li>
+            </ul>
+            
+            <h3>Basic JavaScript Example</h3>
+            <pre>
+// Simple JavaScript example
+let message = "Welcome to Stride JavaScript Course!";
+console.log(message);
+
+// Function example
+function greetUser(name) {
+    return `Hello, ${name}! Welcome to our course.`;
+}
+
+// Call the function
+let greeting = greetUser("Student");
+alert(greeting);
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">2</span>JavaScript Functions</h2>
+            <p>This module covers how to create and use functions in JavaScript.</p>
+            
+            <ul class="topic-list">
+                <li>Function Definitions and Invocation</li>
+                <li>Function Parameters and Arguments</li>
+                <li>Function Return values</li>
+                <li>Function Arrows (ES6 arrow functions)</li>
+                <li>Function Call, Apply, and Bind methods</li>
+                <li>Function Closures and Scope</li>
+                <li>Immediately Invoked Function Expressions (IIFE)</li>
+                <li>Recursive Functions</li>
+            </ul>
+            
+            <h3>Function Examples</h3>
+            <pre>
+// Regular function
+function multiply(a, b) {
+    return a * b;
+}
+
+// Arrow function (ES6)
+const divide = (a, b) => a / b;
+
+// Function with default parameters
+function greet(name = "Guest") {
+    return `Hello, ${name}!`;
+}
+
+// Closure example
+function createCounter() {
+    let count = 0;
+    return function() {
+        count++;
+        return count;
+    };
+}
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">3</span>JavaScript Objects</h2>
+            <p>This module explores JavaScript objects, properties, and methods.</p>
+            
+            <ul class="topic-list">
+                <li>Object Definitions and Properties</li>
+                <li>Object Methods and the 'this' keyword</li>
+                <li>Object Constructors and Prototypes</li>
+                <li>Object Destructuring (ES6)</li>
+                <li>Object Iterations and Management</li>
+                <li>Object Getters and Setters</li>
+                <li>Object Protection and Reference</li>
+                <li>JSON Objects and Methods :cite[1]</li>
+            </ul>
+            
+            <table>
+                <tr>
+                    <th>Concept</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>Object Literal</td>
+                    <td>Creating objects with key-value pairs</td>
+                    <td><code>let person = {name: "John", age: 30};</code></td>
+                </tr>
+                <tr>
+                    <td>Constructor</td>
+                    <td>Creating objects with constructor functions</td>
+                    <td><code>function Person(name, age) { this.name = name; this.age = age; }</code></td>
+                </tr>
+                <tr>
+                    <td>Class (ES6)</td>
+                    <td>Creating objects with class syntax</td>
+                    <td><code>class Person { constructor(name, age) { this.name = name; this.age = age; } }</code></td>
+                </tr>
+            </table>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">4</span>JavaScript Arrays</h2>
+            <p>This module covers working with arrays in JavaScript.</p>
+            
+            <ul class="topic-list">
+                <li>Array Creation and Initialization</li>
+                <li>Array Methods (push, pop, shift, unshift, splice)</li>
+                <li>Array Search methods (indexOf, find, filter)</li>
+                <li>Array Sort methods (sort, reverse)</li>
+                <li>Array Iterations (forEach, map, reduce, filter)</li>
+                <li>Array Const and Immutability</li>
+                <li>Multidimensional Arrays</li>
+                <li>Array Spread Operator (ES6) :cite[1]</li>
+            </ul>
+            
+            <h3>Array Examples</h3>
+            <pre>
+// Array creation
+let fruits = ["Apple", "Banana", "Orange"];
+
+// Array methods
+fruits.push("Mango"); // Add to end
+fruits.pop(); // Remove from end
+fruits.unshift("Strawberry"); // Add to beginning
+fruits.shift(); // Remove from beginning
+
+// Array iteration
+fruits.forEach(function(fruit, index) {
+    console.log(index + ": " + fruit);
+});
+
+// Array mapping
+let fruitLengths = fruits.map(fruit => fruit.length);
+console.log(fruitLengths); // [5, 6, 6]
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">5</span>JavaScript Control Flow</h2>
+            <p>This module covers conditional statements and loops in JavaScript.</p>
+            
+            <ul class="topic-list">
+                <li>JS If Else statements</li>
+                <li>JS Switch statements</li>
+                <li>JS Loop For (standard, in, of)</li>
+                <li>JS Loop While and Do While</li>
+                <li>JS Break and Continue statements</li>
+                <li>JS Error Handling (try, catch, finally, throw)</li>
+                <li>JS Comparisons and Booleans</li>
+                <li>Ternary Operator :cite[1]</li>
+            </ul>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">6</span>JavaScript DOM Manipulation <span class="badge badge-basic">Essential</span></h2>
+            <p>This module teaches how to interact with HTML documents using JavaScript.</p>
+            
+            <ul class="topic-list">
+                <li>DOM Introduction and the DOM Tree</li>
+                <li>DOM Methods (getElementById, querySelector, etc.)</li>
+                <li>DOM Document and Elements</li>
+                <li>DOM HTML (changing content and attributes)</li>
+                <li>DOM Forms and Form Validation</li>
+                <li>DOM CSS (changing styles and classes) :cite[9]</li>
+                <li>DOM Animations</li>
+                <li>DOM Events and Event Listeners :cite[8]</li>
+            </ul>
+            
+            <h3>DOM Manipulation Example</h3>
+            <pre>
+// Changing HTML content
+document.getElementById("demo").innerHTML = "Hello JavaScript!";
+
+// Changing CSS styles
+document.getElementById("demo").style.color = "blue";
+document.getElementById("demo").style.fontSize = "24px";
+
+// Handling events
+document.getElementById("myBtn").addEventListener("click", function() {
+    alert("Button clicked!");
+});
+
+// Creating new elements
+let newParagraph = document.createElement("p");
+newParagraph.textContent = "This is a new paragraph.";
+document.body.appendChild(newParagraph);
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">7</span>JavaScript Advanced Concepts <span class="badge badge-advanced">Advanced</span></h2>
+            <p>This module covers advanced JavaScript concepts and modern features.</p>
+            
+            <ul class="topic-list">
+                <li>JS Classes and Class Inheritance</li>
+                <li>JS Modules (import/export)</li>
+                <li>JS Promises and Async/Await</li>
+                <li>JS Callbacks and Asynchronous Programming</li>
+                <li>JS Strict Mode</li>
+                <li>JS Hoisting and Scopes</li>
+                <li>JS Debugging and Performance</li>
+                <li>JS Set, Map, WeakSet, WeakMap :cite[1]</li>
+            </ul>
+            
+            <div class="note">
+                <p><strong>Note:</strong> Modern JavaScript (ES6+) includes many powerful features that make code more readable and maintainable, such as arrow functions, classes, modules, and destructuring assignments.</p>
+            </div>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">8</span>JavaScript Web APIs <span class="badge badge-new">New</span></h2>
+            <p>This module introduces browser Web APIs that can be used with JavaScript.</p>
+            
+            <ul class="topic-list">
+                <li>Web API Introduction</li>
+                <li>Web Storage API (localStorage, sessionStorage)</li>
+                <li>Web Fetch API for HTTP requests</li>
+                <li>Web Geolocation API</li>
+                <li>Web History API</li>
+                <li>Web Worker API for multithreading</li>
+                <li>Web Validation API</li>
+                <li>Canvas and Graphics APIs :cite[1]</li>
+            </ul>
+            
+            <h3>Fetch API Example</h3>
+            <pre>
+// Fetch data from an API
+fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // Process the data
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+// Using async/await
+async function getData() {
+    try {
+        const response = await fetch('https://api.example.com/data');
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">9</span>JavaScript Best Practices</h2>
+            <p>This module covers JavaScript best practices, style guides, and common mistakes.</p>
+            
+            <ul class="topic-list">
+                <li>JS Style Guide and Coding Conventions</li>
+                <li>JS Best Practices for performance</li>
+                <li>Common JS Mistakes to avoid</li>
+                <li>JS Debugging techniques</li>
+                <li>Error handling strategies</li>
+                <li>Code organization patterns</li>
+                <li>Memory management</li>
+                <li>Security considerations :cite[1]</li>
+            </ul>
+            
+            <div class="note">
+                <p><strong>Tip:</strong> Always use 'const' for variables that won't be reassigned, and 'let' for variables that will change. Avoid using 'var' in modern JavaScript code.</p>
+            </div>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">10</span>Learning Resources and Certification</h2>
+            <p>Stride provides various resources to enhance learning and validate skills.</p>
+            
+            <ul class="topic-list">
+                <li>Interactive code editor for practicing JavaScript</li>
+                <li>JavaScript exercises and quizzes</li>
+                <li>Progress tracking with personal account</li>
+                <li>Projects for building real-world applications</li>
+                <li>JavaScript certification program</li>
+                <li>Complete JavaScript references</li>
+                <li>Community forums for discussion</li>
+                <li>Video tutorials and webinars :cite[1]:cite[6]</li>
+            </ul>
+            
+            <div class="note">
+                <p><strong>Certification:</strong> Stride offers a JavaScript certification exam that results in a "Certified JavaScript Developer" credential. This certification validates your skills for employers.</p>
+            </div>
+            
+            <a href="#" class="btn"><i class="fas fa-graduation-cap"></i> Get Certified</a>
+        </section>
+        
+        <section class="module">
+            <h2>JavaScript Applications and Relevance</h2>
+            <p>JavaScript knowledge is essential across multiple development disciplines:</p>
+            
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Application of JavaScript</th>
+                </tr>
+                <tr>
+                    <td>Frontend Development</td>
+                    <td>Creating interactive web interfaces and single-page applications</td>
+                </tr>
+                <tr>
+                    <td>Backend Development</td>
+                    <td>Server-side programming with Node.js runtime environment</td>
+                </tr>
+                <tr>
+                    <td>Mobile Development</td>
+                    <td>Building cross-platform mobile apps with frameworks like React Native</td>
+                </tr>
+                <tr>
+                    <td>Game Development</td>
+                    <td>Creating browser-based games and interactive experiences</td>
+                </tr>
+                <tr>
+                    <td>Data Visualization</td>
+                    <td>Building charts, graphs, and interactive dashboards</td>
+                </tr>
+            </table>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2023 Stride Learning Platform. All rights reserved.</p>
+        <p>Contact us: info@stridelearning.com | (800) 555-STRIDE</p>
+        <p>Based on JavaScript content from W3Schools :cite[1]</p>
+    </footer>
+</body>
+</html>

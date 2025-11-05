@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stride - HTML Course Curriculum</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(to right, green, rgb(36,98,213));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:-gradient(to right, green , rgba(36,98,213) );
+            transform: rotate(30deg);
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #3a7bd5;
+            padding: 12px;
+            border-left: 5px solid #00d2ff;
+            margin: 30px 0 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        h3 {
+            color: #2c5282;
+            margin: 20px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px dotted #00d2ff;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .module {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .topic-list {
+            list-style-type: none;
+            margin: 15px 0;
+        }
+        
+        .topic-list li {
+            padding: 10px 5px 10px 40px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            position: relative;
+            border-left: 3px solid #3a7bd5;
+        }
+        
+        .topic-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3a7bd5;
+            font-weight: bold;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        th {
+            background: linear-gradient(to right, #3a7bd5, #00d2ff);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #edf2f7;
+        }
+        
+        .note {
+            background-color: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+            position: relative;
+        }
+        
+        .note::before {
+            content: 'ℹ️';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1890ff;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e53e3e;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #718096;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #3a7bd5, #00d2ff);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #3a7bd5;
+            color: #3a7bd5;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            pre {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        .progress-container {
+            background: #e2e8f0;
+            border-radius: 50px;
+            height: 12px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(to right, #3a7bd5, #00d2ff);
+            border-radius: 50px;
+            height: 100%;
+            width: 75%; /* Example progress */
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to right, #3a7bd5, #00d2ff);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            margin-right: 15px;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">STRIDE</div>
+        <h style="color:white">HTML Course Curriculum</h1>
+        <p>Master Web Development with Our Comprehensive HTML Program</p>
+    </header>
+    
+    <div class="container">
+        <section class="module">
+            <h2>Course Introduction</h2>
+            <p>Stride offers a comprehensive, beginner-friendly HTML tutorial that requires no prior programming experience. Our course is designed with bite-sized, simple, and easy-to-understand content that has been proven effective by thousands of students.</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            
+            <div class="note">
+                <p><strong>Note:</strong> HTML was invented by Tim Berners-Lee in 1991, and has evolved through many versions, with HTML5 being the current standard.</p>
+            </div>
+            
+            <h3>What is HTML?</h3>
+            <p>HTML (HyperText Markup Language) is the standard markup language for creating Web pages. It describes the structure of a Web page and consists of a series of elements that tell the browser how to display the content.</p>
+            
+            <a href="#" class="btn"><i class="fas fa-play-circle"></i> Start Learning</a>
+            <a href="#" class="btn btn-outline"><i class="fas fa-download"></i> Download Syllabus</a>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">1</span>HTML Basics</h2>
+            <p>This foundational module covers the essential building blocks of HTML documents.</p>
+            
+            <ul class="topic-list">
+                <li>HTML Document Structure (<code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>)</li>
+                <li>HTML Headings (<code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code>)</li>
+                <li>HTML Paragraphs (<code>&lt;p&gt;</code>)</li>
+                <li>HTML Links (<code>&lt;a&gt;</code> with href attribute)</li>
+                <li>HTML Images (<code>&lt;img&gt;</code> with src, alt, width, and height attributes)</li>
+                <li>HTML Elements and Tags syntax</li>
+                <li>Viewing HTML Source Code</li>
+            </ul>
+            
+            <h3>Basic HTML Document Example</h3>
+            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to Stride&lt;/h1&gt;
+    &lt;p&gt;This is my first web page.&lt;/p&gt;
+    &lt;a href="https://stride.com"&gt;Visit Stride&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">2</span>HTML Formatting and Styles</h2>
+            <p>This module covers how to format text and apply styles to HTML elements.</p>
+            
+            <ul class="topic-list">
+                <li>HTML Text Formatting (bold, italic, emphasized, marked, etc.)</li>
+                <li>HTML Styles using CSS</li>
+                <li>HTML Quotations and Citations (<code>&lt;blockquote&gt;</code>, <code>&lt;q&gt;</code>, <code>&lt;cite&gt;</code>)</li>
+                <li>HTML Comments (<code>&lt;!-- --&gt;</code>)</li>
+                <li>HTML CSS implementation</li>
+                <li>HTML Colors</li>
+            </ul>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">3</span>HTML Links and Images</h2>
+            <p>This module explores hyperlinks and image implementation in detail.</p>
+            
+            <ul class="topic-list">
+                <li>Creating hyperlinks (absolute vs. relative URLs)</li>
+                <li>Link target attributes (_blank, _self, _parent, _top)</li>
+                <li>Image maps and clickable areas</li>
+                <li>Using images as links</li>
+                <li>Image optimization and best practices</li>
+            </ul>
+            
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>href</td>
+                    <td>Specifies the URL of the link destination</td>
+                    <td><code>&lt;a href="https://stride.com"&gt;Link&lt;/a&gt;</code></td>
+                </tr>
+                <tr>
+                    <td>target</td>
+                    <td>Specifies where to open the linked document</td>
+                    <td><code>&lt;a target="_blank"&gt;Opens in new tab&lt;/a&gt;</code></td>
+                </tr>
+                <tr>
+                    <td>alt</td>
+                    <td>Alternative text for images</td>
+                    <td><code>&lt;img alt="Description"&gt;</code></td>
+                </tr>
+            </table>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">4</span>HTML Tables and Lists</h2>
+            <p>This module covers how to organize data using tables and lists.</p>
+            
+            <ul class="topic-list">
+                <li>Creating tables (<code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;td&gt;</code>, <code>&lt;th&gt;</code>)</li>
+                <li>Table styling and formatting</li>
+                <li>Ordered and unordered lists (<code>&lt;ol&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>)</li>
+                <li>Description lists (<code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, <code>&lt;dd&gt;</code>)</li>
+                <li>Nested lists</li>
+            </ul>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">5</span>HTML Forms and Input Elements</h2>
+            <p>This comprehensive module teaches how to create interactive forms for user input.</p>
+            
+            <ul class="topic-list">
+                <li>Form creation (<code>&lt;form&gt;</code> element)</li>
+                <li>Input types (text, password, radio, checkbox, etc.)</li>
+                <li>Form attributes (action, method, target)</li>
+                <li>Dropdown lists (<code>&lt;select&gt;</code>, <code>&lt;option&gt;</code>)</li>
+                <li>Text areas (<code>&lt;textarea&gt;</code>)</li>
+                <li>Form validation</li>
+                <li>Input attributes (placeholder, required, readonly, etc.)</li>
+            </ul>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">6</span>HTML Graphics and Media</h2>
+            <p>This module introduces graphics and multimedia elements in HTML.</p>
+            
+            <ul class="topic-list">
+                <li>Canvas graphics (<code>&lt;canvas&gt;</code>)</li>
+                <li>SVG graphics</li>
+                <li>Audio elements (<code>&lt;audio&gt;</code>)</li>
+                <li>Video elements (<code>&lt;video&gt;</code>)</li>
+                <li>Embedding content with <code>&lt;iframe&gt;</code></li>
+                <li>Media attributes and controls</li>
+            </ul>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">7</span>Advanced HTML Features</h2>
+            <p>This module covers advanced HTML concepts and APIs.</p>
+            
+            <ul class="topic-list">
+                <li>HTML5 semantic elements (<code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>)</li>
+                <li>HTML APIs (Geolocation, Drag/Drop, Web Storage)</li>
+                <li>HTML MathML</li>
+                <li>HTML encoding (character sets)</li>
+                <li>URL encoding</li>
+                <li>Local Storage</li>
+                <li>HTML accessibility features</li>
+            </ul>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">8</span>HTML Best Practices</h2>
+            <p>This module covers the standard HTML skeleton and development best practices.</p>
+            
+            <ul class="topic-list">
+                <li>HTML document skeleton</li>
+                <li>Meta tags (charset, viewport, etc.)</li>
+                <li>DOCTYPE declaration</li>
+                <li>HTML validation</li>
+                <li>Cross-browser compatibility</li>
+                <li>Responsive design principles</li>
+                <li>SEO best practices</li>
+            </ul>
+            
+            <h3>Standard HTML Skeleton</h3>
+            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Stride HTML Course&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Content goes here --&gt;
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+        </section>
+        
+        <section class="module">
+            <h2><span class="icon">9</span>Learning Resources</h2>
+            <p>Stride provides various resources to enhance learning and validate skills.</p>
+            
+            <ul class="topic-list">
+                <li>Interactive code editor for practicing code</li>
+                <li>HTML exercises and quizzes</li>
+                <li>Progress tracking with personal account</li>
+                <li>Projects for building and testing real-world skills</li>
+                <li>HTML certification program</li>
+                <li>Complete HTML references</li>
+            </ul>
+            
+            <div class="note">
+                <p><strong>Certification:</strong> Stride offers an HTML certification exam that results in a "Certified HTML Developer" credential.</p>
+            </div>
+            
+            <a href="#" class="btn"><i class="fas fa-graduation-cap"></i> Get Certified</a>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2025 Stride . All rights reserved.</p>
+        <p>Contact us: jairusstanui69@gmail.com | (254) 718858240</p>
+    </footer>
+</body>
+</html>

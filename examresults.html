@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Exam Results</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <!-- Use Tailwind CSS for styling -->
+     <script src="https://cdn.tailwindcss.com"></script>
+     
+     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body {
+               font-family: 'Inter', sans-serif;
+               
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+    </style>
+</head>
+
+<body style="background: linear-gradient(to right,green,rgb(36,98,213))" class="text-white min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 space-y-6">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-indigo-400">Exam Results</h1>
+            <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                <button id="back-button" class="px-4 py-2 bg-slate-700 text-sm text-slate-300 rounded-lg hover:bg-slate-600 transition-colors">
+                    Go back
+                </button>
+                <button id="logout-button" class="px-4 py-2 bg-red-500 text-sm text-white rounded-lg hover:bg-red-600 transition-colors">
+                    Logout
+                </button>
+            </div>
+        </div>
+        <p id="welcome-message" class="text-center text-slate-300"></p>
+
+        <!-- Dynamic Message Areas -->
+        <p id="loading-message" class="text-center text-indigo-400 hidden">Loading your results...</p>
+        <p id="error-message" class="text-center text-red-500 hidden"></p>
+        <p id="no-results-message" class="text-center text-slate-400 italic hidden">You have not taken any exams yet.</p>
+
+        <!-- Results Table Container -->
+        <div id="results-container" class="hidden overflow-x-auto rounded-lg border border-slate-700">
+            <table class="min-w-full text-sm text-left text-slate-300">
+                <thead class="text-xs text-slate-400 uppercase bg-slate-700">
+                    <tr>
+                        <th scope="col" class="py-3 px-6">Exam Type</th>
+                        <th scope="col" class="py-3 px-6">Score</th>
+                        <th scope="col" class="py-3 px-6">Total Questions</th>
+                        <th scope="col" class="py-3 px-6">Date Taken</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table-body">
+                    <!-- Results rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = sessionStorage.getItem('user_id');
+            const userName = sessionStorage.getItem('name');
+    
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+            const resultsContainer = document.getElementById('results-container');
+            const welcomeMessage = document.getElementById('welcome-message');
+            const resultsTableBody = document.getElementById('results-table-body');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const backButton = document.getElementById('back-button');
+            const logoutButton = document.getElementById('logout-button');
+    
+            // Function to show a message and hide others
+            const showMessage = (element, message, type = 'info') => {
+                loadingMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                resultsContainer.classList.add('hidden');
+                noResultsMessage.classList.add('hidden');
+    
+                if (type === 'error') {
+                    errorMessage.textContent = message;
+                    errorMessage.classList.remove('hidden');
+                } else if (type === 'no-results') {
+                    noResultsMessage.textContent = message;
+                    noResultsMessage.classList.remove('hidden');
+                } else {
+                    element.textContent = message;
+                    element.classList.remove('hidden');
+                }
+            };
+    
+            // Check if user is logged in
+            if (!userId) {
+                showMessage(errorMessage, 'You must be logged in to view results. Redirecting to login...', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+    
+            // Display a welcome message
+            welcomeMessage.textContent = `Hello, ${userName}! Here are your latest exam results.`;
+            
+            // Function to fetch and render results
+            const fetchResults = async () => {
+                showMessage(loadingMessage, 'Loading your results...');
+    
+                try {
+                    const response = await fetch('/api/get-results', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: userId })
+                    });
+                    
+                    if (response.ok) {
+                        const results = await response.json();
+                        loadingMessage.classList.add('hidden');
+                        
+                        if (results.length > 0) {
+                            resultsContainer.classList.remove('hidden');
+                            resultsTableBody.innerHTML = ''; // Clear previous results
+                            results.forEach(exam => {
+                                const row = document.createElement('tr');
+                                row.classList.add('hover:bg-slate-700', 'transition-colors', 'border-b', 'border-slate-600');
+                                
+                                // Format the date
+                                const date = new Date(exam.date_taken);
+                                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+    
+                                row.innerHTML = `
+                                    <td class="py-3 px-6 text-left whitespace-nowrap">${exam.exam_type}</td>
+                                    <td class="py-3 px-6 text-left">${exam.score}</td>
+                                    <td class="py-3 px-6 text-left">${exam.total_questions}</td>
+                                    <td class="py-3 px-6 text-left">${formattedDate}</td>
+                                `;
+                                resultsTableBody.appendChild(row);
+                            });
+                        } else {
+                            showMessage(noResultsMessage, 'You have not taken any exams yet.', 'no-results');
+                        }
+                    } else {
+                        const errorData = await response.json();
+                        showMessage(errorMessage, errorData.message || 'Failed to fetch exam results.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    showMessage(errorMessage, 'A network error occurred. Please try again.', 'error');
+                }
+            };
+    
+            // Event listener for the "Go back" button
+            backButton.addEventListener('click', () => {
+                window.history.back(); // Go back to the previous page
+            });
+    
+            // Event listener for the "Logout" button
+            logoutButton.addEventListener('click', () => {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            });
+    
+            // Fetch results when the page loads
+            fetchResults();
+        });
+    </script>
+</body>
+</html>

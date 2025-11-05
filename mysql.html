@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Mastery Course | Complete Database Training</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+            --success: #27ae60;
+            --highlight: #f39c12;
+            --transition: all 0.3s ease;
+            --green:green;
+            --headercolor:rgb(36, 98, 213);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            min-width: 180px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            border: none;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        
+        .btn:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        .course-content {
+            padding: 60px 0;
+            background: var(--light);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        .module {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .module-header {
+            background: var(--secondary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .module-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .module-title {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        .module-duration {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .module-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .module.active .module-content {
+            padding: 25px;
+            max-height: 3000px;
+        }
+        
+        .topic {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .topic:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .topic-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .explanation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            tab-size: 4;
+        }
+        
+        .code-comment {
+            color: #a0aec0;
+        }
+        
+        .code-keyword {
+            color: #63b3ed;
+            font-weight: bold;
+        }
+        
+        .code-function {
+            color: #68d391;
+        }
+        
+        .code-string {
+            color: #f6ad55;
+        }
+        
+        .code-value {
+            color: #f6e05e;
+        }
+        
+        .instructor-section {
+            background: linear-gradient(to right, #2c3e50, #1a2a3a);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .testimonials {
+            background: white;
+            padding: 60px 0;
+        }
+        
+        .faq-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        
+        .enrollment-cta {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-database"></i>
+            </div>
+            <h1>MySQL Mastery Course</h1>
+            <p class="subtitle">From database fundamentals to advanced optimization techniques - master MySQL with comprehensive training</p>
+            </div>
+            
+
+            
+            <a href="enrollment.html" class="btn">Enroll Now</a>
+        </div>
+    </header>
+    
+    <section class="course-content">
+        <div class="container">
+            <h2 class="section-title">Detailed Course Curriculum</h2>
+            
+            <!-- Module 1 -->
+            <div class="module active">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div>
+                        <h3 class="module-title">Module 1: Database Fundamentals</h3>
+                        <p class="module-duration">Duration: 1 week</p>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div class="topic">
+                        <h4 class="topic-title">What is a Database?</h4>
+                        <div class="explanation">
+                            <p>A database is an organized collection of structured information, or data, typically stored electronically in a computer system. Databases are managed by Database Management Systems (DBMS) which provide:</p>
+                            <ul>
+                                <li>Data organization and structure</li>
+                                <li>Data retrieval and manipulation capabilities</li>
+                                <li>Data security and access control</li>
+                                <li>Data integrity enforcement</li>
+                                <li>Concurrent access management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Relational Database Concepts</h4>
+                        <div class="explanation">
+                            <p>Relational databases organize data into tables with rows and columns:</p>
+                            <ul>
+                                <li><strong>Tables</strong>: Represent entities (e.g., Customers, Orders)</li>
+                                <li><strong>Rows</strong>: Represent individual records</li>
+                                <li><strong>Columns</strong>: Represent attributes of the entity</li>
+                                <li><strong>Primary Keys</strong>: Unique identifiers for each row</li>
+                                <li><strong>Foreign Keys</strong>: Create relationships between tables</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Installing MySQL Server</h4>
+                        <div class="explanation">
+                            <p>MySQL can be installed on various platforms. Here's the basic process:</p>
+                            <pre>
+<span class="code-comment"># For Ubuntu/Debian systems</span>
+sudo apt update
+sudo apt install mysql-server
+sudo mysql_secure_installation
+
+<span class="code-comment"># For Windows</span>
+<span class="code-comment"># Download installer from https://dev.mysql.com/downloads/installer/</span>
+<span class="code-comment"># Run the installer and follow the prompts</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Creating Your First Database</h4>
+                        <div class="explanation">
+                            <p>Basic commands to create and manage databases:</p>
+                            <pre>
+<span class="code-comment">-- Connect to MySQL server</span>
+mysql -u root -p
+
+<span class="code-comment">-- Create a new database</span>
+<span class="code-keyword">CREATE DATABASE</span> company_db;
+
+<span class="code-comment">-- Switch to the new database</span>
+<span class="code-keyword">USE</span> company_db;
+
+<span class="code-comment">-- Create a simple table</span>
+<span class="code-keyword">CREATE TABLE</span> employees (
+    id <span class="code-keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    first_name <span class="code-keyword">VARCHAR</span>(50) <span class="code-keyword">NOT NULL</span>,
+    last_name <span class="code-keyword">VARCHAR</span>(50) <span class="code-keyword">NOT NULL</span>,
+    email <span class="code-keyword">VARCHAR</span>(100) <span class="code-keyword">UNIQUE</span>,
+    hire_date <span class="code-keyword">DATE NOT NULL</span>,
+    salary <span class="code-keyword">DECIMAL</span>(10,2)
+);</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 2 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-table"></i>
+                    </div>
+                    <div>
+                        <h3 class="module-title">Module 2: SQL Essentials</h3>
+                        <p class="module-duration">Duration: 2 weeks</p>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div class="topic">
+                        <h4 class="topic-title">SQL Syntax and Structure</h4>
+                        <div class="explanation">
+                            <p>SQL (Structured Query Language) is used to manage relational databases. Key components:</p>
+                            <ul>
+                                <li><strong>DDL</strong>: Data Definition Language (CREATE, ALTER, DROP)</li>
+                                <li><strong>DML</strong>: Data Manipulation Language (SELECT, INSERT, UPDATE, DELETE)</li>
+                                <li><strong>DCL</strong>: Data Control Language (GRANT, REVOKE)</li>
+                                <li><strong>TCL</strong>: Transaction Control Language (COMMIT, ROLLBACK)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Data Types in MySQL</h4>
+                        <div class="explanation">
+                            <p>MySQL supports various data types:</p>
+                            <pre>
+<span class="code-comment">-- Numeric types</span>
+<span class="code-keyword">INT</span>, <span class="code-keyword">SMALLINT</span>, <span class="code-keyword">TINYINT</span>, <span class="code-keyword">MEDIUMINT</span>, <span class="code-keyword">BIGINT</span>
+<span class="code-keyword">DECIMAL</span>(10,2), <span class="code-keyword">FLOAT</span>, <span class="code-keyword">DOUBLE</span>
+
+<span class="code-comment">-- String types</span>
+<span class="code-keyword">CHAR</span>(10), <span class="code-keyword">VARCHAR</span>(255), <span class="code-keyword">TEXT</span>, <span class="code-keyword">BLOB</span>
+
+<span class="code-comment">-- Date and time types</span>
+<span class="code-keyword">DATE</span>, <span class="code-keyword">TIME</span>, <span class="code-keyword">DATETIME</span>, <span class="code-keyword">TIMESTAMP</span>, <span class="code-keyword">YEAR</span>
+
+<span class="code-comment">-- Specialized types</span>
+<span class="code-keyword">ENUM</span>('small','medium','large'), <span class="code-keyword">SET</span>('red','green','blue')</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">CRUD Operations</h4>
+                        <div class="explanation">
+                            <p>Basic operations to manage data:</p>
+                            <pre>
+<span class="code-comment">-- Create (INSERT)</span>
+<span class="code-keyword">INSERT INTO</span> employees (first_name, last_name, email, hire_date, salary)
+<span class="code-keyword">VALUES</span> ('John', 'Doe', 'john.doe@example.com', '2023-01-15', 75000.00);
+
+<span class="code-comment">-- Read (SELECT)</span>
+<span class="code-keyword">SELECT</span> * <span class="code-keyword">FROM</span> employees;
+<span class="code-keyword">SELECT</span> first_name, last_name, salary <span class="code-keyword">FROM</span> employees <span class="code-keyword">WHERE</span> salary > 60000;
+
+<span class="code-comment">-- Update (UPDATE)</span>
+<span class="code-keyword">UPDATE</span> employees
+<span class="code-keyword">SET</span> salary = 80000.00
+<span class="code-keyword">WHERE</span> last_name = 'Doe';
+
+<span class="code-comment">-- Delete (DELETE)</span>
+<span class="code-keyword">DELETE FROM</span> employees
+<span class="code-keyword">WHERE</span> hire_date < '2020-01-01';</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Sorting and Filtering Data</h4>
+                        <div class="explanation">
+                            <p>Organize and refine query results:</p>
+                            <pre>
+<span class="code-comment">-- Basic sorting with ORDER BY</span>
+<span class="code-keyword">SELECT</span> first_name, last_name, hire_date
+<span class="code-keyword">FROM</span> employees
+<span class="code-keyword">ORDER BY</span> hire_date <span class="code-keyword">DESC</span>;
+
+<span class="code-comment">-- Filtering with WHERE</span>
+<span class="code-keyword">SELECT</span> *
+<span class="code-keyword">FROM</span> employees
+<span class="code-keyword">WHERE</span> department_id = 5 <span class="code-keyword">AND</span> salary > 50000;
+
+<span class="code-comment">-- Pattern matching with LIKE</span>
+<span class="code-keyword">SELECT</span> *
+<span class="code-keyword">FROM</span> employees
+<span class="code-keyword">WHERE</span> last_name <span class="code-keyword">LIKE</span> 'S%'; <span class="code-comment">-- Starts with S</span>
+
+<span class="code-comment">-- Range filtering with BETWEEN</span>
+<span class="code-keyword">SELECT</span> *
+<span class="code-keyword">FROM</span> employees
+<span class="code-keyword">WHERE</span> hire_date <span class="code-keyword">BETWEEN</span> '2022-01-01' <span class="code-keyword">AND</span> '2022-12-31';</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 3 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div>
+                        <h3 class="module-title">Module 3: Querying Data</h3>
+                        <p class="module-duration">Duration: 2 weeks</p>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div class="topic">
+                        <h4 class="topic-title">Advanced SELECT Statements</h4>
+                        <div class="explanation">
+                            <p>Go beyond basic queries with powerful techniques:</p>
+                            <pre>
+<span class="code-comment">-- Using DISTINCT to remove duplicates</span>
+<span class="code-keyword">SELECT DISTINCT</span> department_id <span class="code-keyword">FROM</span> employees;
+
+<span class="code-comment">-- Limiting results with LIMIT</span>
+<span class="code-keyword">SELECT</span> * <span class="code-keyword">FROM</span> employees
+<span class="code-keyword">ORDER BY</span> salary <span class="code-keyword">DESC</span>
+<span class="code-keyword">LIMIT</span> 10;
+
+<span class="code-comment">-- Using aliases for columns and tables</span>
+<span class="code-keyword">SELECT</span> 
+    e.first_name <span class="code-keyword">AS</span> "First Name", 
+    e.last_name <span class="code-keyword">AS</span> "Last Name",
+    d.department_name <span class="code-keyword">AS</span> Department
+<span class="code-keyword">FROM</span> employees e
+<span class="code-keyword">JOIN</span> departments d <span class="code-keyword">ON</span> e.department_id = d.department_id;</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Table Joins</h4>
+                        <div class="explanation">
+                            <p>Combine data from multiple tables:</p>
+                            <pre>
+<span class="code-comment">-- INNER JOIN (returns matching records)</span>
+<span class="code-keyword">SELECT</span> e.first_name, e.last_name, d.department_name
+<span class="code-keyword">FROM</span> employees e
+<span class="code-keyword">INNER JOIN</span> departments d <span class="code-keyword">ON</span> e.department_id = d.department_id;
+
+<span class="code-comment">-- LEFT JOIN (returns all records from left table)</span>
+<span class="code-keyword">SELECT</span> e.first_name, e.last_name, d.department_name
+<span class="code-keyword">FROM</span> employees e
+<span class="code-keyword">LEFT JOIN</span> departments d <span class="code-keyword">ON</span> e.department_id = d.department_id;
+
+<span class="code-comment">-- RIGHT JOIN (returns all records from right table)</span>
+<span class="code-keyword">SELECT</span> e.first_name, e.last_name, d.department_name
+<span class="code-keyword">FROM</span> employees e
+<span class="code-keyword">RIGHT JOIN</span> departments d <span class="code-keyword">ON</span> e.department_id = d.department_id;
+
+<span class="code-comment">-- FULL OUTER JOIN (returns all records when match in left or right)</span>
+<span class="code-comment">/* Note: MySQL doesn't support FULL OUTER JOIN directly, 
+   but we can simulate with UNION */</span>
+<span class="code-keyword">SELECT</span> e.first_name, e.last_name, d.department_name
+<span class="code-keyword">FROM</span> employees e
+<span class="code-keyword">LEFT JOIN</span> departments d <span class="code-keyword">ON</span> e.department_id = d.department_id
+<span class="code-keyword">UNION</span>
+<span class="code-keyword">SELECT</span> e.first_name, e.last_name, d.department_name
+<span class="code-keyword">FROM</span> employees e
+<span class="code-keyword">RIGHT JOIN</span> departments d <span class="code-keyword">ON</span> e.department_id = d.department_id;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 4 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <h3 class="module-title">Module 4: Database Design</h3>
+                        <p class="module-duration">Duration: 1 week</p>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div class="topic">
+                        <h4 class="topic-title">Entity-Relationship Modeling</h4>
+                        <div class="explanation">
+                            <p>ER modeling is a conceptual design technique:</p>
+                            <ul>
+                                <li><strong>Entities</strong>: Real-world objects (e.g., Student, Course)</li>
+                                <li><strong>Attributes</strong>: Properties of entities (e.g., student_id, name)</li>
+                                <li><strong>Relationships</strong>: Associations between entities</li>
+                                <li><strong>Cardinality</strong>: One-to-One, One-to-Many, Many-to-Many</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="topic">
+                        <h4 class="topic-title">Normalization Techniques</h4>
+                        <div class="explanation">
+                            <p>Process to eliminate redundancy and dependency:</p>
+                            <ul>
+                                <li><strong>1NF</strong>: Eliminate repeating groups, each cell contains atomic values</li>
+                                <li><strong>2NF</strong>: Be in 1NF and remove partial dependencies</li>
+                                <li><strong>3NF</strong>: Be in 2NF and remove transitive dependencies</li>
+                                <li><strong>BCNF</strong>: Boyce-Codd Normal Form - stricter version of 3NF</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 5 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3 class="module-title">Module 5: Advanced SQL</h3>
+                        <p class="module-duration">Duration: 2 weeks</p>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div class="topic">
+                        <h4 class="topic-title">Stored Procedures and Functions</h4>
+                        <div class="explanation">
+                            <p>Reusable database logic:</p>
+                            <pre>
+<span class="code-comment">-- Create a stored procedure</span>
+<span class="code-keyword">DELIMITER</span> //
+<span class="code-keyword">CREATE PROCEDURE</span> GetEmployeeCount(IN dept_id INT, OUT emp_count INT)
+<span class="code-keyword">BEGIN</span>
+    <span class="code-keyword">SELECT COUNT</span>(*) <span class="code-keyword">INTO</span> emp_count
+    <span class="code-keyword">FROM</span> employees
+    <span class="code-keyword">WHERE</span> department_id = dept_id;
+<span class="code-keyword">END</span> //
+<span class="code-keyword">DELIMITER</span> ;
+
+<span class="code-comment">-- Create a function</span>
+<span class="code-keyword">DELIMITER</span> //
+<span class="code-keyword">CREATE FUNCTION</span> CalculateBonus(salary DECIMAL(10,2)) 
+<span class="code-keyword">RETURNS</span> DECIMAL(10,2)
+<span class="code-keyword">DETERMINISTIC</span>
+<span class="code-keyword">BEGIN</span>
+    <span class="code-keyword">DECLARE</span> bonus DECIMAL(10,2);
+    <span class="code-keyword">SET</span> bonus = salary * 0.15;
+    <span class="code-keyword">RETURN</span> bonus;
+<span class="code-keyword">END</span> //
+<span class="code-keyword">DELIMITER</span> ;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="enrollment-cta">
+                <a href="#enrollment" class="btn">Enroll Now to Access All Modules</a>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    <section id="enrollment" style="background: var(--success); padding: 80px 0; text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; color: white; margin-bottom: 20px;">Ready to Master MySQL?</h2>
+            <p style="font-size: 1.2rem; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto 30px;">
+                Join thousands of students who have transformed their careers with our comprehensive MySQL course
+            </p>
+            <a href="enrollment.html" class="btn" style="background: white; color: var(--success); font-size: 1.2rem; padding: 18px 50px;">
+                Enroll Now
+            </a>
+            <p style="color: rgba(255,255,255,0.8); margin-top: 20px;">
+                30-day money-back guarantee | Lifetime access to course materials
+            </p>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1000px; margin: 0 auto;">
+                <div style="flex: 1; min-width: 300px; padding: 20px;">
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;">MySQL Mastery Course</h3>
+                    <p>Comprehensive database training for developers, DBAs, and data professionals.</p>
+                </div>
+                <div style="flex: 1; min-width: 300px; padding: 20px;">
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;">Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@mysqlcourse.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p>&copy; 2025 MySQL Mastery Course. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Module accordion functionality
+        document.querySelectorAll('.module-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const module = header.parentElement;
+                module.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

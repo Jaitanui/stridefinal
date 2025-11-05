@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnIT - Java Programming Course</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --green:green;
+            --headercolor:rgb(36, 98, 213);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right , var(--light) , var(--light) );
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .course-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .course-content {
+            background: linear-gradient(to right,var(--green), var(--headercolor));
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+        }
+
+        .course-sidebar {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .course-contents {
+            background: #f0f7ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .course-contents h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .contents-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .content-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--accent);
+        }
+
+        .content-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-left: 3px solid var(--primary);
+        }
+
+        .content-item i {
+            color: var(--primary);
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .content-title {
+            font-weight: 500;
+        }
+
+        .course-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-header i {
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+
+        .notes {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            margin: 1.5rem 0;
+        }
+
+        .notes h3 {
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin: 1.2rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+
+        .code-keyword {
+            color: #f92672;
+        }
+
+        .code-type {
+            color: #a6e22e;
+        }
+
+        .code-string {
+            color: #e6db74;
+        }
+
+        .code-comment {
+            color: #75715e;
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 65%;
+            border-radius: 5px;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .sidebar-section {
+            margin-bottom: 1.8rem;
+        }
+
+        .instructor {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .instructor-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .meta-item i {
+            color: var(--primary);
+            width: 24px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .module-item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 3px solid #dbeafe;
+        }
+
+        .module-item:hover {
+            background: #dbeafe;
+            border-left: 3px solid var(--primary);
+        }
+
+        .module-item.active {
+            background: #dbeafe;
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+        }
+
+        .module-item i {
+            color: var(--primary);
+        }
+
+        .rating {
+            color: var(--warning);
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 900px) {
+            .course-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LearnIT</span>
+                <a href="index.html">Home</a>
+            </div>
+            
+            
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Java Programming Course</h1>
+                <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                
+            </div>
+        </div>
+        <nav>
+                <ul>
+                    <li><a href="enrollment.html" STYLE="COLOR:gold">ENROLL NOW</a></li>
+                            </ul>
+            </nav>
+
+        <div class="course-container">
+            <main class="course-content">
+                <!-- Course Contents Section -->
+                <div class="course-contents">
+                    <h3><i class="fas fa-list-ul"></i> Java Course Contents</h3>
+                    <div class="contents-list">
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Introduction to Java</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Variables & Data Types</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Control Structures</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Object-Oriented Programming</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Exception Handling</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Collections Framework</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">File I/O Operations</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Multithreading</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">Networking Basics</span>
+                        </div>
+                        <div class="content-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="content-title">JDBC & Databases</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Introduction Section -->
+                <div class="course-section">
+                    <div class="section-header">
+                        <i class="fas fa-info-circle"></i>
+                        <h2>Introduction to Java</h2>
+                    </div>
+                    <p>Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let programmers write once, run anywhere (WORA), meaning that compiled Java code can run on all platforms that support Java without the need for recompilation.</p>
+                    
+                    <div class="notes">
+                        <h3><i class="fas fa-sticky-note"></i> Key Features of Java</h3>
+                        <ul>
+                            <li><strong>Platform Independent:</strong> Write once, run anywhere (WORA)</li>
+                            <li><strong>Object-Oriented:</strong> Follows OOP concepts like encapsulation, inheritance, polymorphism</li>
+                            <li><strong>Robust:</strong> Strong memory management, exception handling, and type checking</li>
+                            <li><strong>Secure:</strong> Provides secure execution environment</li>
+                            <li><strong>Multithreaded:</strong> Supports concurrent programming</li>
+                            <li><strong>High Performance:</strong> Just-In-Time (JIT) compilers enable high performance</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Java applications are typically compiled to bytecode that can run on any Java virtual machine (JVM) regardless of the underlying computer architecture. The syntax of Java is similar to C and C++, but it has fewer low-level facilities than either of them.</p>
+                </div>
+
+                <!-- Notes Section -->
+                <div class="course-section">
+                    <div class="section-header">
+                        <i class="fas fa-book"></i>
+                        <h2>Core Java Concepts</h2>
+                    </div>
+                    
+                    <div class="notes">
+                        <h3><i class="fas fa-sticky-note"></i> Java Syntax Basics</h3>
+                        <p>Java syntax is derived from C and C++, but is simpler and more strictly object-oriented. Here's a simple "Hello World" program:</p>
+                        
+                        <div class="code-block">
+                            <span class="code-keyword">public class</span> <span class="code-type">HelloWorld</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">public static void</span> main(String[] args) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="code-string">"Hello, World!"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                        
+                        <p>Key elements:</p>
+                        <ul>
+                            <li>Every application must contain a main() method</li>
+                            <li>Java is case-sensitive</li>
+                            <li>Class names should be in PascalCase</li>
+                            <li>Method names should be in camelCase</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="notes">
+                        <h3><i class="fas fa-sticky-note"></i> Variables and Data Types</h3>
+                        <p>Java has two categories of data types: primitive and reference. Primitive types are the basic building blocks:</p>
+                        
+                        <div class="code-block">
+                            <span class="code-comment">// Primitive types</span><br>
+                            <span class="code-keyword">byte</span> age = 25;<br>
+                            <span class="code-keyword">short</span> year = 2023;<br>
+                            <span class="code-keyword">int</span> salary = 85000;<br>
+                            <span class="code-keyword">long</span> population = 7800000000L;<br>
+                            <span class="code-keyword">float</span> pi = 3.14f;<br>
+                            <span class="code-keyword">double</span> precisePi = 3.1415926535;<br>
+                            <span class="code-keyword">char</span> grade = 'A';<br>
+                            <span class="code-keyword">boolean</span> isJavaFun = true;<br>
+                            <br>
+                            <span class="code-comment">// Reference types</span><br>
+                            String name = <span class="code-string">"John Doe"</span>;
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Object-Oriented Programming Section -->
+                <div class="course-section">
+                    <div class="section-header">
+                        <i class="fas fa-cube"></i>
+                        <h2>Object-Oriented Programming in Java</h2>
+                    </div>
+                    
+                    <p>Java is fundamentally object-oriented. All code is written inside classes, and everything is treated as an object. The four main principles of OOP are:</p>
+                    
+                    <div class="notes">
+                        <h3><i class="fas fa-sticky-note"></i> OOP Principles</h3>
+                        <ul>
+                            <li><strong>Encapsulation:</strong> Binding data and methods into a single unit (class)</li>
+                            <li><strong>Inheritance:</strong> Creating new classes from existing ones</li>
+                            <li><strong>Polymorphism:</strong> Ability to take many forms (method overriding/overloading)</li>
+                            <li><strong>Abstraction:</strong> Hiding implementation details and showing only functionality</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="notes">
+                        <h3><i class="fas fa-sticky-note"></i> Class and Object Example</h3>
+                        <div class="code-block">
+                            <span class="code-comment">// Define a class</span><br>
+                            <span class="code-keyword">public class</span> <span class="code-type">Car</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// Fields (attributes)</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;String brand;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;String model;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">int</span> year;<br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// Constructor</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">public</span> Car(String brand, String model, <span class="code-keyword">int</span> year) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.brand = brand;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.model = model;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.year = year;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// Method</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">public void</span> startEngine() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="code-string">"Engine started!"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }<br>
+                            <br>
+                            <span class="code-comment">// Create an object</span><br>
+                            Car myCar = <span class="code-keyword">new</span> Car(<span class="code-string">"Toyota"</span>, <span class="code-string">"Camry"</span>, 2023);<br>
+                            myCar.startEngine(); <span class="code-comment">// Output: Engine started!</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="course-sidebar">
+                <div class="sidebar-section">
+                   
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-title">Course Modules</h3>
+                    <div class="module-list">
+                        <div class="module-item active">
+                            <i class="fas fa-play-circle"></i>
+                            <span>1. Introduction to Java</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>2. Variables & Data Types</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>3. Operators & Expressions</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>4. Control Structures</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>5. Arrays & Strings</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>6. Object-Oriented Programming</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>7. Inheritance & Polymorphism</span>
+                        </div>
+                        <div class="module-item">
+                            <i class="fas fa-book"></i>
+                            <span>8. Exception Handling</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-title">Course Information</h3>
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>Duration: 8 weeks</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-video"></i>
+                            <span>Lectures: 45</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-tasks"></i>
+                            <span>Assignments: 12</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-certificate"></i>
+                            <span>Certificate: Yes</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-language"></i>
+                            <span>Language: English</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="javaquiz.html" class="btn">
+                    <i class="fas fa-javaquiz"></i> java Quiz
+                </a>
+                <a href="#" class="btn btn-outline">
+                    <i class="fas fa-certificate"></i> Get Certificate
+                </a>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Simple interaction for module items
+        document.querySelectorAll('.module-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.module-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

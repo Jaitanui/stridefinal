@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stride - Dashboard</title>
+  <link rel="icon" href="STRIDELOGO.png" type="image">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1649af;
+      --primary-dark: #2929be;
+      --secondary: #8f94fb;
+      --light: #296db1;
+      --dark: #333;
+      --card-bg: #276bc3;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --background:white;
+      --green:green;
+      --headercolor:rgb(36, 98, 213);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body { background: var(--background); color: var(--dark); }
+    header {
+      background: linear-gradient(to right, var(--green), var(--headercolor));
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: 1.8rem; font-weight: 600; }
+    header nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+    header nav a:hover { transform: translateY(-2px); text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    header nav a i { margin-right: 8px; }
+    .logout-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: rgb(11, 37, 61);
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+    .logout-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+    .logout-btn i { margin-right: 8px; }
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+    /* Accessibility Menu Styles */
+    .accessibility-menu {
+    position: relative;
+    display: inline-block;
+    }
+
+    .accessibility-toggle {
+    background: #3a7bd5;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    }
+
+    .accessibility-toggle:hover {
+    transform: scale(1.1);
+    }
+
+    .accessibility-panel {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    display: none;
+    }
+
+    .accessibility-panel h3 {
+    color: #3a7bd5;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.4rem;
+    }
+
+    .accessibility-option {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    }
+
+    .accessibility-option:last-child {
+    border-bottom: none;
+    }
+
+    .accessibility-option h4 {
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 1.1rem;
+    }
+
+    .btn-group {
+    display: flex;
+    gap: 10px;
+    }
+
+    .btn-group button {
+    flex: 1;
+    padding: 8px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #f0f0f0;
+    transition: all 0.2s ease;
+    }
+
+    .btn-group button.active {
+    background: #3a7bd5;
+    color: white;
+    } 
+
+    .btn-group button:hover:not(.active) {
+    background: #ddd;
+    }
+
+    .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .checkbox-option input {
+    width: 18px;
+    height: 18px;
+    }
+
+    .accessibility-reset {
+    width: 100%;
+    padding: 10px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s ease;
+    }
+
+    .accessibility-reset:hover {
+    background: #ddd;
+    }
+
+    /* Accessibility Classes */
+    .text-small {
+    font-size: 0.9rem !important;
+    }
+
+    .text-large {
+    font-size: 1.3rem !important;
+    }
+
+    .text-xlarge {
+    font-size: 1.6rem !important;
+    }
+
+    .high-contrast {
+    background: black !important;
+    color: white !important;
+    }
+
+    .high-contrast .container,
+    .high-contrast .content,
+    .high-contrast header,
+    .high-contrast footer {
+    background: #000 !important;
+    color: white;
+    }
+
+    .high-contrast header {
+    background: linear-gradient(to right, #000, #222) !important;
+    }
+
+    .high-contrast .course-btn {
+    background: #222 !important;
+    color: white !important;
+    }
+
+    .high-contrast .welcome h2 {
+    color: #ffcc00 !important;
+    }
+
+    .dyslexia-mode {
+    font-family: 'Open Dyslexic', sans-serif !important;
+    }
+
+    .reading-guide .content p,
+    .reading-guide .content li {
+    line-height: 2;
+    background: linear-gradient(transparent 50%, rgba(255, 255, 0, 0.2) 50%);
+    }
+
+    .reduce-motion * {
+    transition: none !important;
+    animation: none !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+    .accessibility-panel {
+        width: 280px;
+        right: 10px;
+    }
+    }
+
+    @media (max-width: 480px) {
+    .accessibility-panel {
+        width: 260px;
+        right: 5px;
+    }
+    
+    .accessibility-toggle {
+        width: 40px;
+        height: 40px;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .accessibility-panel {
+        top: 60px;
+    }
+    }
+    .welcome {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .tab-content {
+      background: var(--background);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    #categories {
+      margin-top: 40px;
+    }
+    #categories h2 {
+      text-align: center;
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .category-card {
+      background-color: var(--background);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+    .category-card i {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .category-card h3 {
+      font-size: 1.2rem;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .category-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Stride Dashboard</h1>
+    <nav>
+      <a href="courses.html"><i class="fas fa-book"></i> Courses</a>
+      <a href="quiz.html"><i class="fas fa-file-alt"></i> Tests</a>
+      <a href="exams.html"><i class="fas fa-graduation-cap"></i> Exams</a>
+      <a href="courseupload.html"><i class="fas fa-chalkboard-teacher"></i> Instructors</a>
+      <a href="examresults.html"><i class="fas fa-question-circle"></i> Exam Results</a>
+      <a href="usercourses.html"><i class="fas fa-book"></i>COURSES ENROLLED</a>
+      <a href="feedback.html"><i class="fas fa-book"></i>FEEDBACKS</a>
+
+    </nav>
+    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    <!-- Accessibility Menu Button and Panel -->
+    <div class="accessibility-menu">
+    <button class="accessibility-toggle" id="accessibilityToggle" aria-label="Accessibility Options">
+        <i class="fas fa-universal-access"></i>
+    </button>
+    <div class="accessibility-panel" id="accessibilityPanel" aria-hidden="true">
+        <h3>Accessibility Options</h3>
+        
+        <div class="accessibility-option">
+            <h4>Text Size</h4>
+            <div class="btn-group">
+                <button class="text-size-btn" data-size="small">A-</button>
+                <button class="text-size-btn active" data-size="normal">A</button>
+                <button class="text-size-btn" data-size="large">A+</button>
+            </div>
+        </div>
+        
+        <div class="accessibility-option">
+            <h4>Contrast Mode</h4>
+            <div class="btn-group">
+                <button class="contrast-btn active" data-contrast="normal">Normal</button>
+                <button class="contrast-btn" data-contrast="high">High Contrast</button>
+            </div>
+        </div>
+        
+        <div class="accessibility-option">
+            <h4>Dyslexia Friendly</h4>
+            <div class="checkbox-option">
+                <input type="checkbox" id="dyslexiaFont">
+                <label for="dyslexiaFont">Use OpenDyslexic Font</label>
+            </div>
+        </div>
+        
+        <div class="accessibility-option">
+            <h4>Reading Guide</h4>
+            <div class="checkbox-option">
+                <input type="checkbox" id="readingGuide">
+                <label for="readingGuide">Enable Reading Guide</label>
+            </div>
+        </div>
+        
+        <div class="accessibility-option">
+            <h4>Animation Control</h4>
+            <div class="checkbox-option">
+                <input type="checkbox" id="reduceAnimation">
+                <label for="reduceAnimation">Reduce Animations</label>
+            </div>
+        </div>
+        
+        <button class="accessibility-reset" id="resetAccessibility">Reset All Settings</button>
+    </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome" id="welcomeMessage"></div>
+    <div class="tab-content">
+      <p>Select a section from the navigation above to get started.</p>
+    </div>
+
+    <section id="categories">
+    <h2>Popular Categories</h2>
+    <div class="categories">
+      <div class="category-card">
+        <i class="fas fa-microchip"></i>
+        <h3>JAVA Programming</h3>
+        <a href="enrollment.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Learn coding languages like Python, JavaScript .</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-code"></i>
+        <h3>HTML COURSE</h3>
+        <a href="enrollment.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Learn HTML from scratch with simple tutorials.</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-laptop-code"></i>
+        <h3>JAVASCRIPT</h3>
+        <a href="enrollment.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Javascript Best  learning materials offered.</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-database"></i>
+        <h3>MYSQL</h3>
+        <a href="enrollment.html" style="color:goldenrod">ENROLL NOW</a>
+        <p>Learn <em>database management systems</em> with simple tutorials.</p>
+      </div>
+      
+    </div>
+  </section>
+        <footer>
+            <p>© 2025 STRIDE. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="CONTACTS.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="termsofservice.html">Terms of Service</a>
+            </div>
+        </footer>
+  </main>
+
+<script>
+    
+    // Correctly check if the user is logged in by looking at sessionStorage
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') == 'true';
+    const user_id = sessionStorage.getItem('user_id');
+    const name = sessionStorage.getItem('name');
+
+    if (!isLoggedIn || !user_id) {
+      // If NOT logged in, redirect to the login page
+      window.location.href = 'login.html';
+    } else {
+      // If logged in, show the welcome message
+      document.getElementById('welcomeMessage').textContent = `Welcome, ${name}!`;
+    }
+
+    // Logout function
+    function logout() {
+      // Clear all items from sessionStorage
+      sessionStorage.clear();
+      // Redirect to the login page
+      window.location.href = 'login.html';
+    }
+    // Accessibility Menu Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+    // Toggle accessibility panel
+    const accessibilityToggle = document.getElementById('accessibilityToggle');
+    const accessibilityPanel = document.getElementById('accessibilityPanel');
+    
+    if (accessibilityToggle && accessibilityPanel) {
+        accessibilityToggle.addEventListener('click', function() {
+            const isExpanded = accessibilityPanel.getAttribute('aria-hidden') === 'false';
+            accessibilityPanel.style.display = isExpanded ? 'none' : 'block';
+            accessibilityPanel.setAttribute('aria-hidden', isExpanded ? 'true' : 'false');
+            accessibilityToggle.setAttribute('aria-expanded', !isExpanded);
+        });
+        
+        // Close panel when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!accessibilityPanel.contains(event.target) && 
+                !accessibilityToggle.contains(event.target) && 
+                accessibilityPanel.style.display === 'block') {
+                accessibilityPanel.style.display = 'none';
+                accessibilityPanel.setAttribute('aria-hidden', 'true');
+                accessibilityToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+    
+    // Text size adjustment
+    const textSizeButtons = document.querySelectorAll('.text-size-btn');
+    textSizeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            textSizeButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Remove existing text size classes
+            document.body.classList.remove('text-small', 'text-large', 'text-xlarge');
+            
+            // Apply selected text size
+            const size = this.getAttribute('data-size');
+            if (size === 'small') {
+                document.body.classList.add('text-small');
+            } else if (size === 'large') {
+                document.body.classList.add('text-large');
+            } else if (size === 'xlarge') {
+                document.body.classList.add('text-xlarge');
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('textSize', size);
+        });
+    });
+    
+    // Contrast mode adjustment
+    const contrastButtons = document.querySelectorAll('.contrast-btn');
+    contrastButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            contrastButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Toggle high contrast mode
+            const contrast = this.getAttribute('data-contrast');
+            if (contrast === 'high') {
+                document.body.classList.add('high-contrast');
+            } else {
+                document.body.classList.remove('high-contrast');
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('contrastMode', contrast);
+        });
+    });
+    
+    // Dyslexia-friendly font
+    const dyslexiaFont = document.getElementById('dyslexiaFont');
+    if (dyslexiaFont) {
+        dyslexiaFont.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dyslexia-mode');
+            } else {
+                document.body.classList.remove('dyslexia-mode');
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('dyslexiaFont', this.checked);
+        });
+    }
+    
+    // Reading guide
+    const readingGuide = document.getElementById('readingGuide');
+    if (readingGuide) {
+        readingGuide.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('reading-guide');
+            } else {
+                document.body.classList.remove('reading-guide');
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('readingGuide', this.checked);
+        });
+    }
+    
+    // Reduce animations
+    const reduceAnimation = document.getElementById('reduceAnimation');
+    if (reduceAnimation) {
+        reduceAnimation.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('reduce-motion');
+            } else {
+                document.body.classList.remove('reduce-motion');
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('reduceAnimation', this.checked);
+        });
+    }
+    
+    // Reset all accessibility settings
+    const resetAccessibility = document.getElementById('resetAccessibility');
+    if (resetAccessibility) {
+        resetAccessibility.addEventListener('click', function() {
+            // Reset all classes
+            document.body.classList.remove(
+                'text-small', 'text-large', 'text-xlarge',
+                'high-contrast', 'dyslexia-mode',
+                'reading-guide', 'reduce-motion'
+            );
+            
+            // Reset buttons
+            textSizeButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-size') === 'normal') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            contrastButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-contrast') === 'normal') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Reset checkboxes
+            if (dyslexiaFont) dyslexiaFont.checked = false;
+            if (readingGuide) readingGuide.checked = false;
+            if (reduceAnimation) reduceAnimation.checked = false;
+            
+            // Clear localStorage
+            localStorage.removeItem('textSize');
+            localStorage.removeItem('contrastMode');
+            localStorage.removeItem('dyslexiaFont');
+            localStorage.removeItem('readingGuide');
+            localStorage.removeItem('reduceAnimation');
+        });
+    }
+    
+    // Load saved preferences
+    function loadAccessibilityPreferences() {
+        // Text size
+        const savedTextSize = localStorage.getItem('textSize');
+        if (savedTextSize) {
+            document.body.classList.remove('text-small', 'text-large', 'text-xlarge');
+            if (savedTextSize !== 'normal') {
+                document.body.classList.add('text-' + savedTextSize);
+            }
+            
+            textSizeButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-size') === savedTextSize) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Contrast mode
+        const savedContrastMode = localStorage.getItem('contrastMode');
+        if (savedContrastMode === 'high') {
+            document.body.classList.add('high-contrast');
+            
+            contrastButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-contrast') === 'high') {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Dyslexia font
+        const savedDyslexiaFont = localStorage.getItem('dyslexiaFont');
+        if (savedDyslexiaFont === 'true' && dyslexiaFont) {
+            dyslexiaFont.checked = true;
+            document.body.classList.add('dyslexia-mode');
+        }
+        
+        // Reading guide
+        const savedReadingGuide = localStorage.getItem('readingGuide');
+        if (savedReadingGuide === 'true' && readingGuide) {
+            readingGuide.checked = true;
+            document.body.classList.add('reading-guide');
+        }
+        
+        // Reduce animation
+        const savedReduceAnimation = localStorage.getItem('reduceAnimation');
+        if (savedReduceAnimation === 'true' && reduceAnimation) {
+            reduceAnimation.checked = true;
+            document.body.classList.add('reduce-motion');
+        }
+    }
+    
+    // Load preferences when page loads
+    loadAccessibilityPreferences();
+    });
+</script>
+</body>
+</html>

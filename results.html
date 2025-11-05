@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Exam Results</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <!-- Use Tailwind CSS for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 flex flex-col items-center">
+    <div class="w-full max-w-4xl bg-slate-800 rounded-2xl shadow-xl p-8 space-y-6 mt-10">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-white mb-2">
+                <span class="text-indigo-400">Stride</span> E-Learning
+            </h1>
+            <h2 class="text-2xl font-semibold text-slate-300">Your Exam Results</h2>
+        </div>
+
+        <!-- Loading and Error messages -->
+        <p id="loading-message" class="text-center text-indigo-400 font-medium">
+            Fetching your results...
+        </p>
+        <p id="error-message" class="text-center text-red-500 font-medium hidden">
+            <!-- Error messages will be displayed here -->
+        </p>
+
+        <!-- Container for the results table -->
+        <div id="results-container" class="space-y-4 hidden">
+            <h3 id="welcome-message" class="text-lg text-center font-medium"></h3>
+            
+            <div class="overflow-x-auto bg-slate-700 rounded-lg shadow-inner">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-slate-700 text-slate-400 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Exam Type</th>
+                            <th class="py-3 px-6 text-left">Score</th>
+                            <th class="py-3 px-6 text-left">Total Questions</th>
+                            <th class="py-3 px-6 text-left">Date Taken</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table-body" class="text-slate-200 text-sm font-light">
+                        <!-- Exam results will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <p id="no-results-message" class="text-center text-slate-400 italic hidden">You haven't taken any exams yet.</p>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex justify-center space-x-4 pt-4">
+            <button
+                id="back-button"
+                class="bg-slate-700 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+                Go Back to Dashboard
+            </button>
+            <button
+                id="logout-button"
+                class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = sessionStorage.getItem('user_id');
+            const userName = sessionStorage.getItem('name');
+
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+            const resultsContainer = document.getElementById('results-container');
+            const welcomeMessage = document.getElementById('welcome-message');
+            const resultsTableBody = document.getElementById('results-table-body');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const backButton = document.getElementById('back-button');
+            const logoutButton = document.getElementById('logout-button');
+
+            // Function to show a message and hide others
+            const showMessage = (element, message, type = 'info') => {
+                loadingMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                resultsContainer.classList.add('hidden');
+
+                if (type === 'error') {
+                    errorMessage.textContent = message;
+                    errorMessage.classList.remove('hidden');
+                } else {
+                    element.textContent = message;
+                    element.classList.remove('hidden');
+                }
+            };
+
+            // Check if user is logged in
+            if (!userId) {
+                showMessage(errorMessage, 'You must be logged in to view results. Redirecting to login...');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+
+            // Display a welcome message
+            welcomeMessage.textContent = `Hello, ${userName}! Here are your latest exam results.`;
+            
+            // Function to fetch and render results
+            const fetchResults = async () => {
+                loadingMessage.classList.remove('hidden');
+
+                try {
+                    const response = await fetch('/api/get-results', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: userId })
+                    });
+                    
+                    if (response.ok) {
+                        const results = await response.json();
+                        loadingMessage.classList.add('hidden');
+                        resultsContainer.classList.remove('hidden');
+
+                        if (results.length > 0) {
+                            resultsTableBody.innerHTML = ''; // Clear previous results
+                            noResultsMessage.classList.add('hidden');
+                            results.forEach(exam => {
+                                const row = document.createElement('tr');
+                                row.classList.add('hover:bg-slate-700', 'transition-colors', 'border-b', 'border-slate-600');
+                                
+                                // Format the date
+                                const date = new Date(exam.date_taken);
+                                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+                                row.innerHTML = `
+                                    <td class="py-3 px-6 text-left whitespace-nowrap">${exam.exam_type}</td>
+                                    <td class="py-3 px-6 text-left">${exam.score}</td>
+                                    <td class="py-3 px-6 text-left">${exam.total_questions}</td>
+                                    <td class="py-3 px-6 text-left">${formattedDate}</td>
+                                `;
+                                resultsTableBody.appendChild(row);
+                            });
+                        } else {
+                            noResultsMessage.classList.remove('hidden');
+                        }
+                    } else {
+                        const errorData = await response.json();
+                        showMessage(errorMessage, errorData.message || 'Failed to fetch exam results.');
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    showMessage(errorMessage, 'A network error occurred. Please try again.');
+                }
+            };
+
+            // Event listener for the "Go back" button
+            backButton.addEventListener('click', () => {
+                // Assuming the dashboard page is named dashboard.html
+                window.location.href = 'dashboard.html';
+            });
+
+            // Event listener for the "Logout" button
+            logoutButton.addEventListener('click', () => {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            });
+
+            // Fetch results when the page loads
+            fetchResults();
+        });
+    </script>
+</body>
+</html>

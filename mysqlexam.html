@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Course Exam</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define a color scheme inspired by MySQL's branding */
+        :root {
+            --primary: #00758f; /* A strong blue */
+            --primary-dark: #005a75;
+            --secondary: #f29111; /* A golden orange */
+            --light: #f5f5f5;
+            --dark: #333;
+            --card-bg: #fff;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --green:green;
+            --headercolor:rgb(36, 98, 213);
+        }
+
+        /* Basic styling for all elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Container for the entire exam page */
+        .exam-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .timer-container {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        /* Styling for each individual question block */
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .question p {
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        /* Styling for the radio button options */
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #e2e6ea;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn, .back-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--light);
+            background-color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+        }
+        
+        .back-btn {
+            background-color: #6c757d;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .result-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .result-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+            .exam-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="exam-container">
+        <a href="dashboard.html", style="background-color:green", class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <h1>MySQL Course Exam</h1>
+        <div class="timer-container" id="timer">Time Remaining: 50:00</div>
+        
+        <form id="exam-form">
+            <div id="questions-container">
+                <!-- Questions will be dynamically generated here by JavaScript -->
+            </div>
+            <button type="submit" class="submit-btn" id="submit-btn">Submit Exam</button>
+        </form>
+        
+        <div id="result-message" class="result-message"></div>
+    </div>
+
+    <script>
+        // Define the exam questions and correct answers
+        const questions = [
+            {
+                question: "Which SQL statement is used to extract data from a database?",
+                options: ["`GET`", "`OPEN`", "`SELECT`", "`EXTRACT`"],
+                answer: "`SELECT`"
+            },
+            {
+                question: "Which SQL statement is used to update data in a database?",
+                options: ["`MODIFY`", "`SAVE`", "`UPDATE`", "`CHANGE`"],
+                answer: "`UPDATE`"
+            },
+            {
+                question: "Which SQL statement is used to delete data from a database?",
+                options: ["`REMOVE`", "`COLLAPSE`", "`DELETE`", "`ERASE`"],
+                answer: "`DELETE`"
+            },
+            {
+                question: "Which SQL statement is used to insert new data into a database?",
+                options: ["`ADD NEW`", "`INSERT INTO`", "`ADD RECORD`", "`INSERT NEW`"],
+                answer: "`INSERT INTO`"
+            },
+            {
+                question: "Which SQL clause is used to filter records?",
+                options: ["`FILTER`", "`SEARCH`", "`WHERE`", "`FIND`"],
+                answer: "`WHERE`"
+            },
+            {
+                question: "Which SQL keyword is used to sort the result set?",
+                options: ["`ORDER BY`", "`SORT BY`", "`ARRANGE BY`", "`SORT`"],
+                answer: "`ORDER BY`"
+            },
+            {
+                question: "How do you select a column named 'FirstName' from a table named 'Persons'?",
+                options: ["`SELECT Persons.FirstName`", "`SELECT 'FirstName' FROM Persons`", "`SELECT FirstName FROM Persons`", "`SELECT * FROM Persons WHERE FirstName`"],
+                answer: "`SELECT FirstName FROM Persons`"
+            },
+            {
+                question: "Which operator is used to search for a specified pattern in a column?",
+                options: ["`LIKE`", "`SIMILAR`", "`CONTAINS`", "`IN`"],
+                answer: "`LIKE`"
+            },
+            {
+                question: "Which SQL function is used to count the number of rows?",
+                options: ["`SUM()`", "`TOTAL()`", "`COUNT()`", "`NUMBER()`"],
+                answer: "`COUNT()`"
+            },
+            {
+                question: "Which SQL statement creates a new table?",
+                options: ["`CREATE NEW TABLE`", "`NEW TABLE`", "`CREATE TABLE`", "`MAKE TABLE`"],
+                answer: "`CREATE TABLE`"
+            },
+            {
+                question: "What is the purpose of the `PRIMARY KEY` constraint?",
+                options: ["To uniquely identify each record in a table.", "To prevent `NULL` values.", "To define a default value for a column.", "To create a link to another table."],
+                answer: "To uniquely identify each record in a table."
+            },
+            {
+                question: "The `FOREIGN KEY` constraint is used to...",
+                options: ["...uniquely identify a record.", "...link two tables together.", "...set a default value.", "...ensure data is in uppercase."],
+                answer: "...link two tables together."
+            },
+            {
+                question: "Which data type is used to store a large amount of text?",
+                options: ["`INT`", "`VARCHAR`", "`TEXT`", "`CHAR`"],
+                answer: "`TEXT`"
+            },
+            {
+                question: "How do you select all columns from a table named 'Customers'?",
+                options: ["`SELECT * FROM Customers`", "`SELECT ALL FROM Customers`", "`SELECT Customers`", "`SELECT * FROM ALL Customers`"],
+                answer: "`SELECT * FROM Customers`"
+            },
+            {
+                question: "What does the `INNER JOIN` keyword do?",
+                options: ["Returns all records from both tables.", "Returns records that have matching values in both tables.", "Returns all records from the left table, and the matched records from the right table.", "Returns all records from the right table, and the matched records from the left table."],
+                answer: "Returns records that have matching values in both tables."
+            },
+            {
+                question: "Which statement is used to add a new column to an existing table?",
+                options: ["`ALTER TABLE ... ADD COLUMN`", "`ADD COLUMN ... TO TABLE`", "`MODIFY TABLE ... ADD`", "`ALTER TABLE ... ADD`"],
+                answer: "`ALTER TABLE ... ADD`"
+            },
+            {
+                question: "Which clause is used with aggregate functions to filter groups of rows?",
+                options: ["`WHERE`", "`HAVING`", "`GROUP BY`", "`ORDER BY`"],
+                answer: "`HAVING`"
+            },
+            {
+                question: "Which of the following is an aggregate function?",
+                options: ["`UPPER()`", "`LENGTH()`", "`NOW()`", "`AVG()`"],
+                answer: "`AVG()`"
+            },
+            {
+                question: "How do you update the 'City' column to 'New York' for a customer with 'CustomerID' 101?",
+                options: ["`UPDATE Customers SET City = 'New York' WHERE CustomerID = 101`", "`MODIFY Customers SET City = 'New York' WHERE CustomerID = 101`", "`UPDATE Customers City = 'New York' WHERE CustomerID = 101`", "`SET Customers City = 'New York' WHERE CustomerID = 101`"],
+                answer: "`UPDATE Customers SET City = 'New York' WHERE CustomerID = 101`"
+            },
+            {
+                question: "Which operator tests for the absence of a value in a column?",
+                options: ["`IS NULL`", "`NULL IS`", "`NULL`", "`IS NOT NULL`"],
+                answer: "`IS NULL`"
+            },
+            {
+                question: "The `TRUNCATE TABLE` statement is used to...",
+                options: ["...delete all rows from a table and reset the auto-increment value.", "...delete a table from the database.", "...delete a single row.", "...reorganize a table."],
+                answer: "...delete all rows from a table and reset the auto-increment value."
+            },
+            {
+                question: "What does `DESC` stand for in `ORDER BY`?",
+                options: ["Descending", "Describe", "Decimal", "Detail"],
+                answer: "Descending"
+            },
+            {
+                question: "Which command is used to remove a database entirely?",
+                options: ["`DROP DATABASE`", "`DELETE DATABASE`", "`REMOVE DATABASE`", "`ERASE DATABASE`"],
+                answer: "`DROP DATABASE`"
+            },
+            {
+                question: "The `LEFT JOIN` keyword returns...",
+                options: ["...all matching rows from both tables.", "...all rows from the left table, and the matched rows from the right table.", "...all rows from the right table, and the matched rows from the left table.", "...all rows from both tables."],
+                answer: "...all rows from the left table, and the matched rows from the right table."
+            },
+            {
+                question: "Which of these is not a valid SQL data type?",
+                options: ["`INT`", "`CHAR`", "`BOOLEAN`", "`NUMBER`"],
+                answer: "`NUMBER`"
+            },
+            {
+                question: "Which clause is used to get only a specified number of records?",
+                options: ["`TOP`", "`LIMIT`", "`SELECT TOP`", "`MAX ROWS`"],
+                answer: "`LIMIT`"
+            },
+            {
+                question: "What is the purpose of `GROUP BY`?",
+                options: ["To group rows that have the same values into summary rows.", "To sort the result set.", "To filter rows.", "To join two tables."],
+                answer: "To group rows that have the same values into summary rows."
+            },
+            {
+                question: "What is a `VIEW` in SQL?",
+                options: ["A physical table that stores data.", "A virtual table based on the result-set of an SQL statement.", "A graphical representation of the database.", "A way to back up a database."],
+                answer: "A virtual table based on the result-set of an SQL statement."
+            },
+            {
+                question: "Which operator allows you to specify multiple values in a `WHERE` clause?",
+                options: ["`OR`", "`IN`", "`LIKE`", "`AND`"],
+                answer: "`IN`"
+            },
+            {
+                question: "How do you rename a table?",
+                options: ["`RENAME TABLE old_name TO new_name`", "`ALTER TABLE old_name RENAME TO new_name`", "`CHANGE TABLE old_name TO new_name`", "`RENAME old_name AS new_name`"],
+                answer: "`RENAME TABLE old_name TO new_name`"
+            },
+            {
+                question: "What does `UNION` do in SQL?",
+                options: ["Combines the result-set of two or more `SELECT` statements.", "Joins two tables.", "Adds a new column to a table.", "Calculates the sum of a column."],
+                answer: "Combines the result-set of two or more `SELECT` statements."
+            },
+            {
+                question: "What is an `INDEX` in MySQL?",
+                options: ["A key that uniquely identifies a row.", "A pointer to a record.", "A performance-tuning tool that speeds up data retrieval.", "A way to enforce data integrity."],
+                answer: "A performance-tuning tool that speeds up data retrieval."
+            },
+            {
+                question: "Which is the correct way to drop a column?",
+                options: ["`ALTER TABLE table_name DROP COLUMN column_name`", "`DROP COLUMN column_name FROM table_name`", "`ALTER TABLE table_name REMOVE column_name`", "`DELETE COLUMN column_name FROM table_name`"],
+                answer: "`ALTER TABLE table_name DROP COLUMN column_name`"
+            },
+            {
+                question: "Which command is used to grant permissions to a user?",
+                options: ["`ALLOW`", "`GRANT`", "`PERMIT`", "`AUTHORIZE`"],
+                answer: "`GRANT`"
+            },
+            {
+                question: "What is a subquery?",
+                options: ["A query inside another query.", "A query that returns no results.", "A query used for data manipulation.", "A query that only uses `JOIN`."],
+                answer: "A query inside another query."
+            },
+            {
+                question: "Which clause is used to delete all rows from a table without logging the individual row deletions?",
+                options: ["`DELETE FROM`", "`TRUNCATE TABLE`", "`DROP TABLE`", "`REMOVE FROM`"],
+                answer: "`TRUNCATE TABLE`"
+            },
+            {
+                question: "The `UNIQUE` constraint ensures that...",
+                options: ["...all values in a column are different.", "...the column can't be `NULL`.", "...a value is not empty.", "...a value is greater than zero."],
+                answer: "...all values in a column are different."
+            },
+            {
+                question: "What is the purpose of the `AUTO_INCREMENT` attribute?",
+                options: ["To automatically increment a value when a new row is inserted.", "To automatically decrease a value.", "To automatically insert the current date.", "To automatically insert the user's name."],
+                answer: "To automatically increment a value when a new row is inserted."
+            },
+            {
+                question: "Which function returns the average value of a numeric column?",
+                options: ["`SUM()`", "`TOTAL()`", "`AVG()`", "`COUNT()`"],
+                answer: "`AVG()`"
+            },
+            {
+                question: "Which function returns the highest value of a column?",
+                options: ["`MAX()`", "`HIGHEST()`", "`TOP()`", "`MAXIMUM()`"],
+                answer: "`MAX()`"
+            },
+            {
+                question: "The `WHERE` clause is used with which of the following?",
+                options: ["`SELECT`", "`UPDATE`", "`DELETE`", "All of the above."],
+                answer: "All of the above."
+            },
+            {
+                question: "What does the `DATE` data type store?",
+                options: ["Date and time.", "Date only.", "Time only.", "A combination of text and date."],
+                answer: "Date only."
+            },
+            {
+                question: "Which operator is a shortcut for a series of `OR` conditions?",
+                options: ["`OR`", "`BETWEEN`", "`IN`", "`LIKE`"],
+                answer: "`IN`"
+            },
+            {
+                question: "What does `LIKE 'A%'` mean in a `WHERE` clause?",
+                options: ["Starts with 'A'.", "Ends with 'A'.", "Contains 'A'.", "Is exactly 'A'."],
+                answer: "Starts with 'A'."
+            },
+            {
+                question: "How do you select data from two or more tables that have a common column?",
+                options: ["`UNION`", "`JOIN`", "`GROUP BY`", "`FILTER`"],
+                answer: "`JOIN`"
+            },
+            {
+                question: "Which clause is used to limit the number of rows returned?",
+                options: ["`TOP`", "`LIMIT`", "`ROWCOUNT`", "`FIRST`"],
+                answer: "`LIMIT`"
+            },
+            {
+                question: "How do you comment out a single line in SQL?",
+                options: ["`// This is a comment`", "`-- This is a comment`", "`/* This is a comment */`", "`# This is a comment`"],
+                answer: "`-- This is a comment`"
+            },
+            {
+                question: "Which command is used to modify the structure of a table?",
+                options: ["`MODIFY TABLE`", "`CHANGE TABLE`", "`UPDATE TABLE`", "`ALTER TABLE`"],
+                answer: "`ALTER TABLE`"
+            },
+            {
+                question: "What is the primary purpose of a `DATABASE`?",
+                options: ["To store data in a structured way.", "To perform calculations.", "To create web pages.", "To run software."],
+                answer: "To store data in a structured way."
+            },
+            {
+                question: "Which of the following is not a DDL (Data Definition Language) command?",
+                options: ["`CREATE`", "`ALTER`", "`DROP`", "`SELECT`"],
+                answer: "`SELECT`"
+            }
+        ];
+
+        // --- Timer Logic ---
+        const EXAM_DURATION = 50 * 60; // 50 minutes in seconds
+        let timeRemaining = EXAM_DURATION;
+        let timerInterval;
+
+        const timerDisplay = document.getElementById('timer');
+        const examForm = document.getElementById('exam-form');
+        const resultMessage = document.getElementById('result-message');
+        const questionsContainer = document.getElementById('questions-container');
+
+        // Function to update the timer display
+        function updateTimer() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timerDisplay.textContent = `Time Remaining: ${formattedTime}`;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                submitExam(null, true); // Automatically submit the exam when time runs out
+            }
+            timeRemaining--;
+        }
+
+        // Function to start the timer
+        function startTimer() {
+            timeRemaining = EXAM_DURATION;
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Function to dynamically generate questions
+        function generateQuestions() {
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.id = `q${index + 1}`;
+
+                const questionNumber = document.createElement('div');
+                questionNumber.classList.add('question-number');
+                questionNumber.textContent = `Question ${index + 1} of ${questions.length}`;
+                
+                const questionText = document.createElement('p');
+                questionText.textContent = q.question;
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                q.options.forEach(option => {
+                    const label = document.createElement('label');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `q${index + 1}`;
+                    radio.value = option;
+                    radio.required = true;
+
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(option));
+                    optionsDiv.appendChild(label);
+                });
+
+                questionDiv.appendChild(questionNumber);
+                questionDiv.appendChild(questionText);
+                questionDiv.appendChild(optionsDiv);
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Function to show the result message
+        function showResult(message, isSuccess) {
+            resultMessage.textContent = message;
+            resultMessage.className = `result-message ${isSuccess ? 'success' : 'error'}`;
+            resultMessage.style.display = 'block';
+            resultMessage.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Function to handle exam submission
+        async function submitExam(e, timedOut = false) {
+            if (e) e.preventDefault();
+            
+            clearInterval(timerInterval);
+            examForm.querySelector('.submit-btn').disabled = true;
+
+            let score = 0;
+            const userAnswers = {};
+
+            questions.forEach((q, index) => {
+                const questionName = `q${index + 1}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                
+                if (selectedOption) {
+                    const userAnswer = selectedOption.value;
+                    userAnswers[questionName] = userAnswer;
+                    if (userAnswer === q.answer) {
+                        score++;
+                    }
+                } else {
+                    userAnswers[questionName] = null;
+                }
+            });
+
+            const user_id = sessionStorage.getItem('user_id');
+            const name = sessionStorage.getItem('name');
+
+            const exam_type = 'MySQL';
+            
+            if (!user_id) {
+                showResult('You are not logged in. Redirecting to login page...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/submit-exam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: user_id,
+                        exam_type: exam_type,
+                        score: score,
+                        answers: JSON.stringify(userAnswers)
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showResult(`Exam submitted successfully! Your score is ${score} out of ${questions.length}.`, true);
+                    examForm.remove();
+                } else {
+                    showResult(`Error submitting exam: ${result.message}`, false);
+                    console.error('Server error:', result.message);
+                }
+            } catch (error) {
+                showResult('Network error. Please try again.', false);
+                console.error('Exam submission error:', error);
+            }
+        }
+        
+        // Event listeners
+        examForm.addEventListener('submit', submitExam);
+        
+        // Start the timer and generate questions when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            const user_id = sessionStorage.getItem('user_id');
+            const name = sessionStorage.getItem('name');
+            
+            if (!user_id) {
+                showResult('You must be logged in to take the exam. Redirecting to login...', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } else {
+                document.title = `${name}'s MySQL Exam`;
+                generateQuestions();
+                startTimer();
+            }
+        });
+        
+        // Prevent accidental refresh
+        window.addEventListener('beforeunload', (e) => {
+            if (timeRemaining > 0 && timeRemaining < EXAM_DURATION) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        });
+    </script>
+</body>
+</html>

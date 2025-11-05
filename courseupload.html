@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Portal - Course Upload</title>
+    <link rel="icon" href="STRIDELOGO.png" type="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --green:green;
+            --headercolor:rgb(36,98,213);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, var(--green), var(--headercolor));
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .form-group select, .form-group input[type="file"] {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--light-gray);
+            background-color: var(--light);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input[type="file"] {
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]::-webkit-file-upload-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            padding: 15px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #554ee6;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instructor Portal</h1>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 20px;">Upload new course materials to the platform.</p>
+
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="course-select">Select a Course:</label>
+                <select id="course-select" name="course_id" required>
+                    <!-- Options will be populated by JavaScript -->
+                    <option value="JAVA,JAVASCRIPT,HTML,MYSQL" disabled selected>Loading courses...</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="course-files">Upload Course Content:</label>
+                <input type="file" id="course-files" name="course_files" multiple required>
+            </div>
+            
+            <button type="submit" id="upload-btn">Upload Files</button>
+        </form>
+
+        <p id="status-message" class="status-message"></p>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const courseSelect = document.getElementById('course-select');
+        const statusMessage = document.getElementById('status-message');
+
+        // Function to fetch and populate the courses dropdown
+        async function fetchCourses() {
+            try {
+                const response = await fetch('/api/get-courses');
+                const courses = await response.json();
+                
+                courseSelect.innerHTML = ''; // Clear loading message
+
+                if (courses.length > 0) {
+                    courses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course.id;
+                        option.textContent = course.title;
+                        courseSelect.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = "";
+                    option.textContent = "No courses available";
+                    courseSelect.appendChild(option);
+                    courseSelect.disabled = true;
+                    document.getElementById('upload-btn').disabled = true;
+                }
+
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+                showStatus('Failed to load courses. Please try again later.', 'error');
+            }
+        }
+
+        // Function to handle the file upload
+        async function uploadFile(event) {
+            event.preventDefault();
+            
+            const formData = new FormData();
+            const courseId = courseSelect.value;
+            const files = document.getElementById('course-files').files;
+
+            if (!courseId || files.length === 0) {
+                showStatus('Please select a course and at least one file.', 'error');
+                return;
+            }
+
+            formData.append('course_id', courseId);
+            for (let i = 0; i < files.length; i++) {
+                formData.append('course_files', files[i]);
+            }
+
+            showStatus('Uploading...', 'info');
+
+            try {
+                const response = await fetch('/api/upload-course-content', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showStatus('Course content uploaded successfully!', 'success');
+                    uploadForm.reset();
+                } else {
+                    showStatus(`Error: ${result.message || 'Failed to upload content'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Network error. Please try again.', 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            // Clear existing classes and add new ones
+            statusMessage.className = `status-message ${type}`;
+        }
+
+        // Check for login status and fetch courses on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const userRole = sessionStorage.getItem('role');
+
+            if (!isLoggedIn || userRole !== 'instructor') {
+                showStatus('You must be logged in as an instructor to upload content.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000); // Redirect after 2 seconds
+            } else {
+                fetchCourses();
+            }
+            
+            const uploadForm = document.getElementById('uploadForm');
+            uploadForm.addEventListener('submit', uploadFile);
+        });
+
+    </script>
+</body>
+</html>
