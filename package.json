@@ -1,0 +1,20 @@
+{
+  "name": "stride-upskilling-backend",
+  "version": "1.0.0",
+  "description": "Backend dependencies for Vercel Serverless Function.",
+  "main": "api/signup.js",
+  "scripts": {
+    "start": "echo 'No custom start script defined. Vercel runs the api files automatically.'"
+  },
+  "keywords": [
+    "vercel",
+    "serverless",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+    // Add "bcrypt": "^5.1.1" here if you decide to hash passwords
+  }
+}
