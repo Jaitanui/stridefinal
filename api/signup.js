@@ -69,7 +69,34 @@ module.exports = async (req, res) => {
     } catch (error) {
         console.error('Database or Server Error:', error);
         res.status(500).json({ message: 'Internal server error during signup.' });
+    } 
+    
+    // Insert the new enrollment document
+        const enrollmentRecord = {
+            userId: userObjectId,
+            name: name,
+            email: email,
+            courseName: courseName,
+            enrolledAt: new Date()
+        };
+
+        const result = await enrollmentsCollection.insertOne(enrollmentRecord);
+
+        // Success response
+        res.status(201).json({ 
+            message: `Successfully enrolled in ${courseName}!`,
+            enrollment_id: result.insertedId.toString()
+        });
+
+    } catch (error) {
+        console.error('Enrollment Server Error:', error);
+        res.status(500).json({ message: 'Internal server error during enrollment.' });
     } finally {
+        await client.close();
+    }
+};
+
+    finally {
         // Close the connection
         await client.close();
     }
