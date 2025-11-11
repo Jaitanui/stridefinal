@@ -60,22 +60,7 @@ module.exports = async (req, res) => {
     } catch (error) {
         console.error('Login Server Error:', error);
         res.status(500).json({ message: 'Internal server error during login.' });
-    } 
-
-// NEW: Endpoint to get a list of courses for the dropdown
-app.get('/api/get-courses', async (req, res) => {
-    try {
-        const sql = 'SELECT course_id AS id, title AS title FROM courses';
-        const [rows] = await db.execute(sql);
-        res.status(200).json(rows);
-    } catch (error) {
-        console.error('Error fetching courses:', error);
-        res.status(500).json({ message: 'An error occurred while fetching courses.' });
-    }
-});
-
-    
-    finally {
+    } finally {
         await client.close();
     }
 };

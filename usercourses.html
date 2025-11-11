@@ -12,7 +12,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+            background-color: linear-gradient( to right, green, rgb(36,98,213));
             color: #334155;
         }
         .container {
@@ -21,7 +21,7 @@
             padding: 2rem;
         }
         .course-card {
-            background-color: white;
+            background-color: blue;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
@@ -30,10 +30,11 @@
         .course-card:hover {
             transform: translateY(-5px);
         }
+        
     </style>
 </head>
 <body style="background: linear-gradient( to right,green,rgb(36,98,213))" class="bg-slate-900 min-h-screen">
-    <div style="background-color: white" class="container mx-auto p-4 md:p-8">
+    <div style="background-color: purple" class="container mx-auto p-4 md:p-8">
         <header class="flex items-center justify-between border-b pb-4 mb-6">
             <a href="dashboard.html" class="flex items-center text-indigo-400 hover:text-indigo-300 transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>
@@ -81,14 +82,15 @@
                 courseList.innerHTML = ''; // Clear previous content
 
                 try {
-                    const response = await fetch('/api/login', {
+                    // ... inside fetchEnrolledCourses function
+                   const response = await fetch('/api/enrolledcourses', { // <--- THIS IS THE FIX
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                           'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ user_id: userId })
-                    });
-
+                 });
+                    
                     const courses = await response.json();
 
                     if (response.ok) {
